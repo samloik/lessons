@@ -1,19 +1,34 @@
-# This is a sample Python script.
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import pandas as pd
+
+PATH_TO_THE_FILES = {
+    'РАБОТА':'C:\Andrew files\\',
+    'ДОМ': 'C:\Andrew files\\'
+}
+
+PATH = PATH_TO_THE_FILES ['РАБОТА']
+
+IN_FILES = [
+    '2021.10.11 продажи за год KYB ТС.xlsx',
+    '2021.10.11 продажи за год KYB ШАВ.xlsx',
+    '2021.10.11 продажи за год KYB ШСВ.xlsx'
+]
+
+OUT_FILES = [
+    'общий.xlsx'
+]
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def andrew_task():
+    print( 'IN_FILES\n', IN_FILES )
+    print( '\nOUT_FILES\n', OUT_FILES)
+    file_name1 = PATH + '\'' + IN_FILES[0] + '\''
+    #data1 = pd.read_excel (open(file_name1,'rb') )
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-print('***')
+    print( file_name1 )
 
-print('okay')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+andrew_task()
+print( '\n\n hello ')

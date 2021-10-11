@@ -23,10 +23,12 @@ def andrew_task():
     print( 'IN_FILES\n', IN_FILES )
     print( '\nOUT_FILES\n', OUT_FILES)
     file_name1 = PATH + '\'' + IN_FILES[0] + '\''
-    #data1 = pd.read_excel (open(file_name1,'rb') )
-
+    print('*C:\Andrew files\\2021.10.11 продажи за год KYB ТС.xlsx', 'rb')
+    #data1 = pd.read_excel( open('C:\Andrew files\\2021.10.11 продажи за год KYB ТС.xlsx','rb'))
+    #data1 = pd.read_excel (open(file_name1,'rb')
 
     print( file_name1 )
+
 
 
 

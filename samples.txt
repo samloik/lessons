@@ -68,7 +68,7 @@ os.rename('yourfile.zip', 'yourfile.xlsx')
 def search(name):
     search_queue = deque()
     search_queue += graph(name]
-    searched = []                           # Этот массив испопьзуется дпя отспеживания уже проверенных пюдей
+    searched = []                          # Этот массив испопьзуется дпя отспеживания уже проверенных пюдей
     while search_queue:
         person = search_queue.popleft()
         if not person in searched:          # Чеповек проверяется топько в том спучае, еспи он не проверяпся ранее

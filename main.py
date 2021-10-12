@@ -70,6 +70,7 @@ def andrew_task():
     print(file_name2)
     print(file_name3)
     print(file_name_out)
+    print('\n')
 
     os.chdir( PATH )
     #print ( PATH)
@@ -100,8 +101,7 @@ def try_load( f ):
 
 
 #test()
-#problem()
 andrew_task()
-print('\n\n hello ')
+
 
 

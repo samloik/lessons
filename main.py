@@ -1,5 +1,5 @@
 import pandas as pd # pip install openpyxl - проблема ушла
-# import os # для os.chdir()
+import os # для os.chdir()
 
 PATH_TO_THE_FILES = {
     'РАБОТА': "C:\Andrew files",
@@ -58,7 +58,29 @@ def test():
             print(col, index, ' = ', value)
 
 
+import shutil
+from zipfile import ZipFile
+
+def problem():
+    # Создаем временную папку
+    tmp_folder = '/tmp/convert_wrong_excel/'
+    os.makedirs(tmp_folder, exist_ok=True)
+
+    # Распаковываем excel как zip в нашу временную папку
+    with ZipFile('yourfile.xlsx') as excel_container:
+        excel_container.extractall(tmp_folder)
+
+    # Переименовываем файл с неверным названием
+    wrong_file_path = os.path.join(tmp_folder, 'xl', 'SharedStrings.xml')
+    correct_file_path = os.path.join(tmp_folder, 'xl', 'sharedStrings.xml')
+    os.rename(wrong_file_path, correct_file_path)
+
+    # Запаковываем excel обратно в zip и переименовываем в исходный файл
+    shutil.make_archive('yourfile', 'zip', tmp_folder)
+    os.rename('yourfile.zip', 'yourfile.xlsx')
+
 
 #test()
+#problem()
 andrew_task()
 print('\n\n hello ')

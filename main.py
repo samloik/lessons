@@ -41,6 +41,7 @@ def andrew_task():
 
     print( DataFrame1 )
 
+# тест функции enumerate
 def test():
     cols = ["A", "B", "C", "D", "E"]
     txt = [0, 1, 2, 3, 4]
@@ -55,6 +56,6 @@ def test():
 
 
 
-test()
-#andrew_task()
+#test()
+andrew_task()
 print('\n\n hello ')

@@ -1,5 +1,6 @@
 import pandas as pd # pip install openpyxl - проблема ушла
-import os # для os.chdir()
+import os # для os.chdir() и problem()
+
 
 PATH_TO_THE_FILES = {
     'РАБОТА': "C:\Andrew files",
@@ -37,12 +38,41 @@ def andrew_task():
 
     #DataFrame1 = pd.ExcelFile(file_name1)
 
+    try_load2( file_name1 )
+
+def try_load2( f ):
+    file_name2 = f
     DataFrame1 = pd.read_excel( file_name2 )
-
-
-
-
+    print(DataFrame1)
     print( DataFrame1 )
+
+
+def try_load( f ):
+    file_name2 = f
+    try:
+         DataFrame1 = pd.read_excel( file_name2 )
+         print(DataFrame1)
+    except KeyError as Error:
+        if Error == "There is no item named 'xl/sharedStrings.xml' in the archive":
+            #"There is no item named 'xl/sharedStrings.xml' in the archive":
+            print ('####', Error)
+            sys.exit(1)
+        else:
+            print ( 'Error:', Error )
+
+    #print( KeyError, TypeError, NameError )
+
+    #print( DataFrame1 )
+
+
+
+
+#test()
+#problem()
+andrew_task()
+print('\n\n hello ')
+
+
 
 # тест функции enumerate
 def test():

@@ -1,12 +1,12 @@
-
-import pandas as pd
+import pandas as pd # pip install openpyxl - проблема ушла
+# import os # для os.chdir()
 
 PATH_TO_THE_FILES = {
-    'РАБОТА':'C:\Andrew files\\',
-    'ДОМ': 'C:\Andrew files\\'
+    'РАБОТА': "C:\Andrew files",
+    'ДОМ': "C:\Andrew files"
 }
 
-PATH = PATH_TO_THE_FILES ['РАБОТА']
+PATH = PATH_TO_THE_FILES['РАБОТА']
 
 IN_FILES = [
     '2021.10.11 продажи за год KYB ТС.xlsx',
@@ -20,17 +20,29 @@ OUT_FILES = [
 
 
 def andrew_task():
-    print( 'IN_FILES\n', IN_FILES )
-    print( '\nOUT_FILES\n', OUT_FILES)
-    file_name1 = PATH + '\'' + IN_FILES[0] + '\''
-    print('*C:\Andrew files\\2021.10.11 продажи за год KYB ТС.xlsx', 'rb')
-    #data1 = pd.read_excel( open('C:\Andrew files\\2021.10.11 продажи за год KYB ТС.xlsx','rb'))
-    #data1 = pd.read_excel (open(file_name1,'rb')
+    print('IN_FILES\n', IN_FILES)
+    print('\nOUT_FILES\n', OUT_FILES)
 
-    print( file_name1 )
+    file_name1 = PATH + '\\' + IN_FILES[0]
+    file_name2 = PATH + '\\' + IN_FILES[1]
+    file_name3 = PATH + '\\' + IN_FILES[2]
+    file_name_out = PATH + '\\' + OUT_FILES[0]
+
+    print(file_name1)
+    print(file_name2)
+    print(file_name3)
+    print(file_name_out)
+
+
+    DataFrame1 = pd.read_excel( file_name1 )
+
+
+
+
+    print( DataFrame1 )
 
 
 
 
 andrew_task()
-print( '\n\n hello ')
+print('\n\n hello ')

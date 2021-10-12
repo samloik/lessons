@@ -37,13 +37,12 @@ def test():
 import shutil
 from zipfile import ZipFile
 
-#print('problem: >>', filename)
+# переименовывание файла 'SharedStrings.xml' в файл 'sharedStrings.xml' в архиве excel-файла filename
 def problem( filename ):
     tmp_folder = '/tmp/convert_wrong_excel/'
     os.makedirs(tmp_folder, exist_ok=True)
 
     # Распаковываем excel как zip в нашу временную папку
-    print('problem: >>', filename)                        # -----
     with ZipFile( filename ) as excel_container:
         excel_container.extractall(tmp_folder)
 
@@ -54,6 +53,7 @@ def problem( filename ):
 
     # Запаковываем excel обратно в zip и переименовываем в исходный файл
     shutil.make_archive( filename, 'zip', tmp_folder)
+    os.remove( filename )
     os.rename( filename+'.zip', filename )
 
 
@@ -71,38 +71,30 @@ def andrew_task():
     print(file_name3)
     print(file_name_out)
 
-    #print( DataFrame1)
     os.chdir( PATH )
     #print ( PATH)
 
-    #DataFrame1 = pd.ExcelFile(file_name1)
+    DataFrame1 = try_load( file_name1 )
+    DataFrame2 = try_load( file_name2 )
+    DataFrame3 = try_load( file_name3 )
 
-    try_load2( file_name2 )
-
-def try_load2( f ):
-    file_name = f
-    problem( file_name)
-    #DataFrame1 = pd.read_excel( file_name )
-
-    #print( DataFrame1 )
+    print( DataFrame1 )
 
 
+# загружаем файл (read_excel) и ловим ошибку "There is no item named 'xl/sharedStrings.xml' in the archive"
 def try_load( f ):
     file_name = f
     try:
          DataFrame1 = pd.read_excel( file_name )
-         print(DataFrame1)
+         return DataFrame1
     except KeyError as Error:
-        if Error == "There is no item named 'xl/sharedStrings.xml' in the archive":
-            #"There is no item named 'xl/sharedStrings.xml' in the archive":
-            print ('####', Error)
-            sys.exit(1)
+        if str(Error) == "\"There is no item named 'xl/sharedStrings.xml' in the archive\"":
+            problem( file_name )
+            print ('Исправлена ошибка: ', Error, f'в файле: \"{ file_name }\"\n' )
+            DataFrame1 = pd.read_excel(file_name)
+            return DataFrame1
         else:
-            print ( 'Error:', Error )
-
-    #print( KeyError, TypeError, NameError )
-
-    #print( DataFrame1 )
+            print ( 'Ошибка: >>' + str(Error) + '<<' )
 
 
 

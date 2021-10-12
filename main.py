@@ -85,8 +85,11 @@ def andrew_task():
 
     oDataFrame = DataFrame1
 
-    # создание файла для записи - тест
 
+
+    """
+    # создание файла для записи - тест
+    
     # открываем новый файл на запись
     workbook = xlsxwriter.Workbook( file_name_out )
 
@@ -101,20 +104,20 @@ def andrew_task():
 
     # сохраняем и закрываем
     workbook.close()
-
+    """
 
     """
-    
     # временный вывод для контроля
     print( '\nHead():' )
     print( oDataFrame.head() )
 
     print( '\ninfo():' )
     print( oDataFrame.info() )
+    """
 
     #for col in oDataFrame:
     
-    """
+
     
 
 

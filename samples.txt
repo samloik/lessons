@@ -55,3 +55,29 @@ os.rename(wrong_file_path, correct_file_path)
 # Запаковываем excel обратно в zip и переименовываем в исходный файл
 shutil.make_archive('yourfile', 'zip', tmp_folder)
 os.rename('yourfile.zip', 'yourfile.xlsx')
+
+
+
+
+стр.146 Глава 6. Поиск в ширину
+
+А вот окончательная версия кода поиска в ширину, в которой учтено это
+обстоятельство:
+
+
+def search(name):
+    search_queue = deque()
+    search_queue += graph(name]
+    searched = []                           # Этот массив испопьзуется дпя отспеживания уже проверенных пюдей
+    while search_queue:
+        person = search_queue.popleft()
+        if not person in searched:          # Чеповек проверяется топько в том спучае, еспи он не проверяпся ранее
+            if person_is_seller(person):
+            print person +" is а mango seller!"
+            return True
+        else:
+        search_queue += graph[person]
+        searched.append(person)             # Чеповек помечается как уже проверенный
+    return False
+
+search("you")

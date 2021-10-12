@@ -41,8 +41,20 @@ def andrew_task():
 
     print( DataFrame1 )
 
+def test():
+    cols = ["A", "B", "C", "D", "E"]
+    txt = [0, 1, 2, 3, 4]
+
+    # Loop over the rows and columns and fill in the values
+    for num in range(5):
+        row = num
+        print( row)
+        for index, col in enumerate(cols):
+            value = txt[index] + num
+            print(col, index, ' = ', value)
 
 
 
-andrew_task()
+test()
+#andrew_task()
 print('\n\n hello ')

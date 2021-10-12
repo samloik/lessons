@@ -58,14 +58,17 @@ def problem( filename ):
 
 
 def andrew_task():
+    """ временный вывод имен для контроля """
     print('IN_FILES\n', IN_FILES)
     print('\nOUT_FILES\n', OUT_FILES)
 
+    # формируем имена файлов из пути и наименований
     file_name1 = PATH + '\\' + IN_FILES[0]
     file_name2 = PATH + '\\' + IN_FILES[1]
     file_name3 = PATH + '\\' + IN_FILES[2]
     file_name_out = PATH + '\\' + OUT_FILES[0]
 
+    """ временный вывод имен для контроля """
     print(file_name1)
     print(file_name2)
     print(file_name3)
@@ -73,27 +76,31 @@ def andrew_task():
     print('\n')
 
     os.chdir( PATH )
-    #print ( PATH)
 
+    """ загружаем массивы и ловим ошибки в файлах """
     DataFrame1 = try_load( file_name1 )
     DataFrame2 = try_load( file_name2 )
     DataFrame3 = try_load( file_name3 )
 
-    print( DataFrame1 )
+    oDataFrame = DataFrame1
+
+
+    """ временный вывод для контроля """
+    print( oDataFrame )
 
 
 # загружаем файл (read_excel) и ловим ошибку "There is no item named 'xl/sharedStrings.xml' in the archive"
 def try_load( f ):
     file_name = f
     try:
-         DataFrame1 = pd.read_excel( file_name )
-         return DataFrame1
+         DataFrame = pd.read_excel( file_name )
+         return DataFrame
     except KeyError as Error:
         if str(Error) == "\"There is no item named 'xl/sharedStrings.xml' in the archive\"":
             problem( file_name )
             print ('Исправлена ошибка: ', Error, f'в файле: \"{ file_name }\"\n' )
-            DataFrame1 = pd.read_excel(file_name)
-            return DataFrame1
+            DataFrame = pd.read_excel(file_name)
+            return DataFrame
         else:
             print ( 'Ошибка: >>' + str(Error) + '<<' )
 

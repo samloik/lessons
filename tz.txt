@@ -30,6 +30,10 @@ https://pythonru.com/primery/pandas-value-counts
 https://habr.com/ru/company/ruvds/blog/494720/
 https://habr.com/ru/company/ruvds/blog/442516/
 
+https://tokmakov.msk.ru/blog/item/71 - работа с ячейками sheet
+
+https://tirinox.ru/write-excel-python/ - xlsxwriter - Пишем файл Excel из Python
+
 
 3. записать в массив все позиции из 1 первого массива добавить объем продаж первого склада и НОЛЬ по остальным
 4. перебираем 2й массив добавляя продажи на 2й склад, при наличии позиции в новом массиве, или при осутствии

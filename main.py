@@ -1,5 +1,6 @@
 import pandas as pd # pip install openpyxl - проблема ушла
 import os # для os.chdir() и problem()
+import xlsxwriter
 
 
 PATH_TO_THE_FILES = {
@@ -84,13 +85,39 @@ def andrew_task():
 
     oDataFrame = DataFrame1
 
+    # создание файла для записи - тест
 
-    """ временный вывод для контроля """
+    # открываем новый файл на запись
+    workbook = xlsxwriter.Workbook( file_name_out )
+
+    # создаем там "лист"
+    worksheet = workbook.add_worksheet()
+
+    # в ячейку A1 пишем текст
+    worksheet.write('A1', 'Hello world')
+
+    worksheet.write(0, 0, 'Это A1!')
+    worksheet.write(4, 3, 'Колонка D, стока 5')
+
+    # сохраняем и закрываем
+    workbook.close()
+
+
+    """
+    
+    # временный вывод для контроля
     print( '\nHead():' )
     print( oDataFrame.head() )
 
     print( '\ninfo():' )
     print( oDataFrame.info() )
+
+    #for col in oDataFrame:
+    
+    """
+    
+
+
 
 # загружаем файл (read_excel) и ловим ошибку "There is no item named 'xl/sharedStrings.xml' in the archive"
 def try_load( f ):

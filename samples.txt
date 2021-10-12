@@ -29,3 +29,29 @@ for num in range(5):
 # Save the result
 book.save("test.xls")
 
+
+
+
+
+https://ru.stackoverflow.com/questions/1077685/keyerror-there-is-no-item-named-xl-sharedstrings-xml-in-the-archive
+Столкнулся с такой же проблемой, надеюсь, мой ответ кому-нибудь поможет.
+
+import shutil
+from zipfile import ZipFile
+
+# Создаем временную папку
+tmp_folder = '/tmp/convert_wrong_excel/'
+os.makedirs(tmp_folder, exist_ok=True)
+
+# Распаковываем excel как zip в нашу временную папку
+with ZipFile('yourfile.xlsx') as excel_container:
+    excel_container.extractall(tmp_folder)
+
+# Переименовываем файл с неверным названием
+wrong_file_path = os.path.join(tmp_folder, 'xl', 'SharedStrings.xml')
+correct_file_path = os.path.join(tmp_folder, 'xl', 'sharedStrings.xml')
+os.rename(wrong_file_path, correct_file_path)
+
+# Запаковываем excel обратно в zip и переименовываем в исходный файл
+shutil.make_archive('yourfile', 'zip', tmp_folder)
+os.rename('yourfile.zip', 'yourfile.xlsx')

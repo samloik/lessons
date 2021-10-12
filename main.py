@@ -86,8 +86,11 @@ def andrew_task():
 
 
     """ временный вывод для контроля """
-    print( oDataFrame )
+    print( '\nHead():' )
+    print( oDataFrame.head() )
 
+    print( '\ninfo():' )
+    print( oDataFrame.info() )
 
 # загружаем файл (read_excel) и ловим ошибку "There is no item named 'xl/sharedStrings.xml' in the archive"
 def try_load( f ):

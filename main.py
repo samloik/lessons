@@ -99,6 +99,7 @@ def andrew_task():
     worksheet.write(0, 0, 'Это A1!')
     worksheet.write(4, 3, 'Колонка D, стока 5')
 
+
     # сохраняем и закрываем
     workbook.close()
 

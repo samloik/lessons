@@ -1,10 +1,9 @@
-import pandas as pd     # pip install openpyxl - проблема ушла
-import os               # для os.chdir() и problem()
+import pandas as pd  # pip install openpyxl - проблема ушла
+import os  # для os.chdir() и problem()
 import xlsxwriter
 import openpyxl
-import shutil                   # для модуля problem
-from zipfile import ZipFile     # для модуля problem
-
+import shutil  # для модуля problem
+from zipfile import ZipFile  # для модуля problem
 
 PATH_TO_THE_FILES = {
     'РАБОТА': 'C:\Andrew files',
@@ -32,38 +31,37 @@ def test():
     # Loop over the rows and columns and fill in the values
     for num in range(5):
         row = num
-        print( row)
+        print(row)
         for index, col in enumerate(cols):
             value = txt[index] + num
             print(col, index, ' = ', value)
 
 
-
 """ загружаем файл (read_excel) и ловим ошибку "There is no item named 'xl/sharedStrings.xml' in the archive" """
-def try_load( f ):
+
+
+def try_load(f):
     file_name = f
     try:
-         DataFrame = pd.read_excel( file_name )
-         return DataFrame
+        DataFrame = pd.read_excel(file_name)
+        return DataFrame
     except KeyError as Error:
         if str(Error) == "\"There is no item named 'xl/sharedStrings.xml' in the archive\"":
-            problem( file_name )
-            print ('Исправлена ошибка: ', Error, f'в файле: \"{ file_name }\"\n' )
+            problem(file_name)
+            print('Исправлена ошибка: ', Error, f'в файле: \"{file_name}\"\n')
             DataFrame = pd.read_excel(file_name)
             return DataFrame
         else:
-            print ( 'Ошибка: >>' + str(Error) + '<<' )
-
-
+            print('Ошибка: >>' + str(Error) + '<<')
 
 
 # переименовывание файла 'SharedStrings.xml' в файл 'sharedStrings.xml' в архиве excel-файла filename
-def problem( filename ):
+def problem(filename):
     tmp_folder = '/tmp/convert_wrong_excel/'
     os.makedirs(tmp_folder, exist_ok=True)
 
     # Распаковываем excel как zip в нашу временную папку
-    with ZipFile( filename ) as excel_container:
+    with ZipFile(filename) as excel_container:
         excel_container.extractall(tmp_folder)
 
     # Переименовываем файл с неверным названием
@@ -72,14 +70,15 @@ def problem( filename ):
     os.rename(wrong_file_path, correct_file_path)
 
     # Запаковываем excel обратно в zip и переименовываем в исходный файл
-    shutil.make_archive( filename, 'zip', tmp_folder)
-    os.remove( filename )
-    os.rename( filename+'.zip', filename )
+    shutil.make_archive(filename, 'zip', tmp_folder)
+    os.remove(filename)
+    os.rename(filename + '.zip', filename)
 
-def preparation1( df1 ):
+
+def preparation1(df1):
     # удаляем ненужные столбцы
-    cols = [1,2,4,5]                    # 0, 3, 6
-    df1.drop( df1.columns[cols], axis = 1, inplace=True )
+    cols = [1, 2, 4, 5]  # 0, 3, 6
+    df1.drop(df1.columns[cols], axis=1, inplace=True)
 
     # удаляем ненужные строки первые 10
     df1.drop(df1.head(10).index, inplace=True)
@@ -88,24 +87,26 @@ def preparation1( df1 ):
     df1.drop(df1.tail(1).index, inplace=True)
     return df1
 
-def preparation2( df2 ):
+
+def preparation2(df2):
     # удаляем ненужные столбцы
-    cols = [1,2,4,6]
-    df2.drop( df2.columns[cols], axis = 1, inplace=True )
+    cols = [1, 2, 4, 6]
+    df2.drop(df2.columns[cols], axis=1, inplace=True)
 
     # удаляем ненужные строки первые 10
-    #rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    #df2.drop( rows,  inplace=True  )
+    # rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    # df2.drop( rows,  inplace=True  )
     df2.drop(df2.head(11).index, inplace=True)
 
     # удаляем последнюю строку
     df2.drop(df2.tail(1).index, inplace=True)
     return df2
 
-def preparation3( df3 ):
+
+def preparation3(df3):
     # удаляем ненужные столбцы
-    cols = [1,2,4,5]                                    # 0, 3, 6 - нужны эти столбцы
-    df3.drop( df3.columns[cols], axis = 1, inplace=True )
+    cols = [1, 2, 4, 5]  # 0, 3, 6 - нужны эти столбцы
+    df3.drop(df3.columns[cols], axis=1, inplace=True)
 
     # удаляем ненужные строки первые 10
     df3.drop(df3.head(12).index, inplace=True)
@@ -133,17 +134,17 @@ def andrew_task():
     print(file_name_out)
     print('\n')
 
-    os.chdir( PATH )
+    os.chdir(PATH)
 
     """ загружаем массивы и ловим ошибки в файлах """
-    df1 = try_load( file_name1 )
-    df2 = try_load( file_name2 )
-    df3 = try_load( file_name3 )
+    df1 = try_load(file_name1)
+    df2 = try_load(file_name2)
+    df3 = try_load(file_name3)
 
     """ подготовка массивов к работе - удаление лишних строк и столбцов """
-    df1 = preparation1( df1 )            # 0, 3, 6    - нужны, 1,2,4,5 - удалить
-    df2 = preparation2( df2 )            # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
-    df3 = preparation2( df3 )            # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
+    df1 = preparation1(df1)  # 0, 3, 6    - нужны, 1,2,4,5 - удалить
+    df2 = preparation2(df2)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
+    df3 = preparation2(df3)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
 
     df0 = df3
 
@@ -158,19 +159,28 @@ def andrew_task():
     print('\n\n>>>')
 
     """
-    for i in range( 0,len(data[0])):
-        print ( data[0][i], data[1][i] )
-        
-    print( '>>', data[2][0])
+    df10 = pd.DataFrame(data[0], columns=['col1'])
+    print(df10)
+    print("\n\n")
+    df10['col2'] = data[1]
+    df10['col3'] = data[2]
     """
 
-    df10 = pd.DataFrame( data[0], columns = ['col1'] )
-    print( df10 )
-    print ("\n\n")
-    df10['col2' ] = data[1]
-    df10['col3'] = data[2]
-    print(df10)
+    df1 = df1.rename(columns={'Unnamed: 0': 'Star_ID' })
+    df2 = df2.rename(columns={'Unnamed: 0': 'Star_ID' })
+    df3 = df3.rename(columns={'Unnamed: 0': 'Star_ID' })
 
+
+    print( df2 )
+
+    df_unique = df1[~df1.Star_ID.isin(df2.Star_ID)]
+
+    # unique_vals = df1[~df1.Star_ID.isin(df2.Star_ID)].append(df2[~df2.Star_ID.isin(df1.Star_ID)], ignore_index=True)
+
+    print( df_unique )
+
+
+    #print(df10)
 
     """
     # создание файла для записи - тест
@@ -201,10 +211,7 @@ def andrew_task():
     """
 
     # for col in oDataFrame:
-    
+
 
 # test()
 andrew_task()
-
-
-

@@ -89,7 +89,7 @@ def preparation1(df1):
     # переименовываем столбцы
     df1 = df1.rename(columns={'Unnamed: 0': 'item_code' })
     df1 = df1.rename(columns={'Unnamed: 3': 'Nomenclature'})
-    df1 = df1.rename(columns={'Unnamed: 6': 'Quantity_05_Pavlovsky'})
+    df1 = df1.rename(columns={'Unnamed: 6': '05_Pavlovsky'})
 
     return df1
 
@@ -106,12 +106,20 @@ def preparation2(df2):
 
     # удаляем последнюю строку
     df2.drop(df2.tail(1).index, inplace=True)
+
+    # переименовываем столбцы
+    df2 = df2.rename(columns={'Unnamed: 0': 'item_code' })
+    df2 = df2.rename(columns={'Unnamed: 3': 'Nomenclature'})
+    df2 = df2.rename(columns={'Unnamed: 5': '02_Car'})
+    df2 = df2.rename(columns={'Unnamed: 7': '04_Victory'})
+    df2 = df2.rename(columns={'Unnamed: 8': '08_Center'})
+
     return df2
 
 
 def preparation3(df3):
     # удаляем ненужные столбцы
-    cols = [1, 2, 4, 5]  # 0, 3, 6 - нужны эти столбцы
+    cols = [1, 2, 4, 6]  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
     df3.drop(df3.columns[cols], axis=1, inplace=True)
 
     # удаляем ненужные строки первые 10
@@ -119,7 +127,40 @@ def preparation3(df3):
 
     # удаляем последнюю строку
     df3.drop(df3.tail(1).index, inplace=True)
+
+    # переименовываем столбцы
+
+    df3 = df3.rename(columns={'Unnamed: 0': 'item_code' })
+    df3 = df3.rename(columns={'Unnamed: 3': 'Nomenclature'})
+    df3 = df3.rename(columns={'Unnamed: 5': '01_Kirova'})
+    df3 = df3.rename(columns={'Unnamed: 7': '03_Inter'})
+    df3 = df3.rename(columns={'Unnamed: 8': '09_Station'})
+
     return df3
+
+
+
+def unique_values( df1, df2 ):
+
+    # получить уникальные значения, которые находятся только в df2 относительно df1
+    df2_unique_vals = df2[~df2.item_code.isin(df1.item_code)]
+
+    """
+    # получить уникальные значения, которые находятся только в df1
+    df1_unique_vals = df1[~df1.item_code.isin(df2.item_code)]
+    
+    # получить как неуникальные значения, которые находятся только в df1
+    df1_unique_vals = df1[df1.item_code.isin(df2.item_code)]
+
+    Чтобы получить как значения, которые находятся только в df1, 
+    так и значения, которые находятся только в df2, 
+    вы можете сделать это
+
+    df_unique_vals = df1[~df1.item_code.isin(df2.item_code)].append(df2[~df2.item_code.isin(df1.item_code)], ignore_index=True)
+
+    """
+
+    return df2_unique_vals
 
 
 def andrew_task():
@@ -150,60 +191,38 @@ def andrew_task():
     """ подготовка массивов к работе - удаление лишних строк и столбцов """
     df1 = preparation1(df1)  # 0, 3, 6    - нужны, 1,2,4,5 - удалить
     df2 = preparation2(df2)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
-    df3 = preparation2(df3)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
+    df3 = preparation3(df3)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
 
-    df0 = df3
-
-    # print( df3[ 'Unnamed: 0'])
-
-    # https://coderoad.ru/43544514/Pandas-%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D1%8F-%D1%8F%D1%87%D0%B5%D0%B9%D0%BA%D0%B8-Excel-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E
-
-    data = {}
-    data[0] = df3['Unnamed: 0'].tolist()
-    data[1] = df3['Unnamed: 3'].tolist()
-    data[2] = df3['Unnamed: 5'].tolist()
+    print( df3 )
     print('\n\n>>>')
 
-    """
-    df10 = pd.DataFrame(data[0], columns=['col1'])
-    print(df10)
-    print("\n\n")
-    df10['col2'] = data[1]
-    df10['col3'] = data[2]
-    """
 
-    df1 = df1.rename(columns={'Unnamed: 0': 'item_code' })
-    df2 = df2.rename(columns={'Unnamed: 0': 'item_code' })
-    df3 = df3.rename(columns={'Unnamed: 0': 'item_code' })
+    """ получить как уникальные значения, которые находятся только в df2 """
+    df2_unique_vals = unique_values( df1, df2)
+
+    # https: // pandas.pydata.org / docs / user_guide / merging.html
+    # Merge, join, concatenate and compare
+
+    # --- добавлены новые столбцы с уникальными позициями
+    #  df2_concat_vals = pd.concat([df1, df2_unique_vals], ignore_index=True, sort=False)
+    # --- возможно неверное действие,
+    # может быть нужен метод append( unique_values )
+
+    # https://pandas.pydata.org/docs/user_guide/merging.html
 
 
-    print( df2 )
+    # TODO --- нужно добавить склад-количество с неуникальными позициями
 
-    # получить как уникальные значения, которые находятся только в df1
-    # df1_unique_vals = df1[~df1.item_code.isin(df2.item_code)]
-    # получить как неуникальные значения, которые находятся только в df1
-    # df1_unique_vals = df1[df1.item_code.isin(df2.item_code)]
 
-    """ Чтобы получить как значения, которые находятся только в df1, так и значения, которые находятся только в df2, вы можете сделать это
-    
-    df_unique_vals = df1[~df1.item_code.isin(df2.item_code)].append(df2[~df2.item_code.isin(df1.item_code)], ignore_index=True)
-    
-    """
 
-    # получить как уникальные значения, которые находятся только в df2
-    df2_unique_vals = df2[~df2.item_code.isin(df1.item_code)]
-
-    # получить как общие значения, которые находятся только в df2
-    #df2_unique_vals = df2[df2.item_code.isin(df1.item_code)]
-
-    # print( df_unique )
-
-    print( df2_unique_vals )
+    """ Запись результатов обработки в excel файл """
 
     with pd.ExcelWriter(file_name_out) as writer:
         df2_unique_vals.to_excel(writer, sheet_name='unique_df')
+        df2_concat_vals.to_excel(writer, sheet_name='concat_df')
         df1.to_excel(writer, sheet_name='df1')
         df2.to_excel(writer, sheet_name='df2')
+        df3.to_excel(writer, sheet_name='df3')
 
 
     """

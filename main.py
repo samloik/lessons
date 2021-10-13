@@ -85,6 +85,12 @@ def preparation1(df1):
 
     # удаляем последнюю строку
     df1.drop(df1.tail(1).index, inplace=True)
+
+    # переименовываем столбцы
+    df1 = df1.rename(columns={'Unnamed: 0': 'item_code' })
+    df1 = df1.rename(columns={'Unnamed: 3': 'Nomenclature'})
+    df1 = df1.rename(columns={'Unnamed: 6': 'Quantity_05_Pavlovsky'})
+
     return df1
 
 
@@ -166,19 +172,45 @@ def andrew_task():
     df10['col3'] = data[2]
     """
 
-    df1 = df1.rename(columns={'Unnamed: 0': 'Star_ID' })
-    df2 = df2.rename(columns={'Unnamed: 0': 'Star_ID' })
-    df3 = df3.rename(columns={'Unnamed: 0': 'Star_ID' })
+    df1 = df1.rename(columns={'Unnamed: 0': 'item_code' })
+    df2 = df2.rename(columns={'Unnamed: 0': 'item_code' })
+    df3 = df3.rename(columns={'Unnamed: 0': 'item_code' })
 
 
     print( df2 )
 
-    df_unique = df1[~df1.Star_ID.isin(df2.Star_ID)]
+    # получить как уникальные значения, которые находятся только в df1
+    # df1_unique_vals = df1[~df1.item_code.isin(df2.item_code)]
+    # получить как неуникальные значения, которые находятся только в df1
+    # df1_unique_vals = df1[df1.item_code.isin(df2.item_code)]
 
-    # unique_vals = df1[~df1.Star_ID.isin(df2.Star_ID)].append(df2[~df2.Star_ID.isin(df1.Star_ID)], ignore_index=True)
+    """ Чтобы получить как значения, которые находятся только в df1, так и значения, которые находятся только в df2, вы можете сделать это
+    
+    df_unique_vals = df1[~df1.item_code.isin(df2.item_code)].append(df2[~df2.item_code.isin(df1.item_code)], ignore_index=True)
+    
+    """
 
-    print( df_unique )
+    # получить как уникальные значения, которые находятся только в df2
+    df2_unique_vals = df2[~df2.item_code.isin(df1.item_code)]
 
+    # получить как общие значения, которые находятся только в df2
+    #df2_unique_vals = df2[df2.item_code.isin(df1.item_code)]
+
+    # print( df_unique )
+
+    print( df2_unique_vals )
+
+    with pd.ExcelWriter(file_name_out) as writer:
+        df2_unique_vals.to_excel(writer, sheet_name='unique_df')
+        df1.to_excel(writer, sheet_name='df1')
+        df2.to_excel(writer, sheet_name='df2')
+
+
+    """
+    df2_unique_vals.to_excel( file_name_out, sheet_name='unique_df' )
+    df1.to_excel(file_name_out, sheet_name='df1')
+    df2.to_excel(file_name_out, sheet_name='df2')
+    """
 
     #print(df10)
 

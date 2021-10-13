@@ -121,16 +121,23 @@ def andrew_task():
     df2 = try_load( file_name2 )
     df3 = try_load( file_name3 )
 
+    """
     df1 = pd.read_excel(file_name1 )
     df2 = pd.read_excel(file_name2 )
     df3 = pd.read_excel(file_name3 )
+    """
 
-    # подготовка массивов к работе - удаление лишних строк и столбцов
+
+    """ подготовка массивов к работе - удаление лишних строк и столбцов """
     df1 = preparation1( df1 )            # 0, 3, 6    - нужны, 1,2,4,5 - удалить
     df2 = preparation2( df2 )            # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
     df3 = preparation2( df3 )            # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
 
-    oDataFrame = df3
+    oDataFrame = df2
+
+    print( df1 )
+    print( df2 )
+    print( df3 )
 
     print( oDataFrame )
 
@@ -155,14 +162,14 @@ def andrew_task():
     workbook.close()
     """
 
-
+    """
     # временный вывод для контроля
     print( '\nHead():' )
     print( oDataFrame.head() )
 
     print( '\ninfo():' )
     print( oDataFrame.info() )
-
+    """
 
     #for col in oDataFrame:
     

@@ -77,7 +77,7 @@ def preparation2( df2 ):
     # удаляем ненужные строки первые 10
     #rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     #df2.drop( rows,  inplace=True  )
-    df2.drop(df2.head(10).index, inplace=True)
+    df2.drop(df2.head(11).index, inplace=True)
 
     # удаляем последнюю строку
     df2.drop(df2.tail(1).index, inplace=True)
@@ -135,11 +135,14 @@ def andrew_task():
 
     oDataFrame = df2
 
-    print( df1 )
+    #print( df1 )
     print( df2 )
-    print( df3 )
+    #print( df3 )
 
-    print( oDataFrame )
+    print( df1['Unnamed: 0'] )
+
+
+    #print( oDataFrame )
 
 
 

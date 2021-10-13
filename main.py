@@ -77,7 +77,7 @@ def preparation2( df2 ):
     # удаляем ненужные строки первые 10
     #rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     #df2.drop( rows,  inplace=True  )
-    df2.drop(df2.head(10).index, inplace=True)
+    df2.drop(df2.head(11).index, inplace=True)
 
     # удаляем последнюю строку
     df2.drop(df2.tail(1).index, inplace=True)
@@ -121,10 +121,6 @@ def andrew_task():
     df2 = try_load( file_name2 )
     df3 = try_load( file_name3 )
 
-    df1 = pd.read_excel(file_name1 )
-    df2 = pd.read_excel(file_name2 )
-    df3 = pd.read_excel(file_name3 )
-
     # подготовка массивов к работе - удаление лишних строк и столбцов
     df1 = preparation1( df1 )            # 0, 3, 6    - нужны, 1,2,4,5 - удалить
     df2 = preparation2( df2 )            # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
@@ -132,7 +128,9 @@ def andrew_task():
 
     oDataFrame = df3
 
-    print( oDataFrame )
+    print( df3[ 'Unnamed: 0'])
+
+    #print( oDataFrame )
 
 
 
@@ -155,14 +153,14 @@ def andrew_task():
     workbook.close()
     """
 
-
+    """
     # временный вывод для контроля
     print( '\nHead():' )
     print( oDataFrame.head() )
 
     print( '\ninfo():' )
     print( oDataFrame.info() )
-
+    """
 
     #for col in oDataFrame:
     

@@ -1,5 +1,5 @@
-import pandas as pd # pip install openpyxl - проблема ушла
-import os # для os.chdir() и problem()
+import pandas as pd     # pip install openpyxl - проблема ушла
+import os               # для os.chdir() и problem()
 import xlsxwriter
 import openpyxl
 import shutil                   # для модуля problem
@@ -7,8 +7,8 @@ from zipfile import ZipFile     # для модуля problem
 
 
 PATH_TO_THE_FILES = {
-    'РАБОТА': "C:\Andrew files",
-    'ДОМ': "C:\Andrew files"
+    'РАБОТА': 'C:\Andrew files',
+    'ДОМ': 'C:\Andrew files'
 }
 
 PATH = PATH_TO_THE_FILES['РАБОТА']
@@ -147,7 +147,7 @@ def andrew_task():
 
     df0 = df3
 
-    #print( df3[ 'Unnamed: 0'])
+    # print( df3[ 'Unnamed: 0'])
 
     # https://coderoad.ru/43544514/Pandas-%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D1%8F-%D1%8F%D1%87%D0%B5%D0%B9%D0%BA%D0%B8-Excel-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E
 
@@ -200,10 +200,10 @@ def andrew_task():
     print( oDataFrame.info() )
     """
 
-    #for col in oDataFrame:
+    # for col in oDataFrame:
     
 
-#test()
+# test()
 andrew_task()
 
 

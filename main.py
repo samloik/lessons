@@ -165,10 +165,6 @@ def andrew_task():
     #for col in oDataFrame:
     
 
-    
-
-
-
 # загружаем файл (read_excel) и ловим ошибку "There is no item named 'xl/sharedStrings.xml' in the archive"
 def try_load( f ):
     file_name = f

@@ -1,6 +1,7 @@
 import pandas as pd # pip install openpyxl - проблема ушла
 import os # для os.chdir() и problem()
 import xlsxwriter
+import openpyxl
 import shutil                   # для модуля problem
 from zipfile import ZipFile     # для модуля problem
 
@@ -151,15 +152,24 @@ def andrew_task():
     # https://coderoad.ru/43544514/Pandas-%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D1%8F-%D1%8F%D1%87%D0%B5%D0%B9%D0%BA%D0%B8-Excel-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E
 
     data = {}
-    data[0] = df3['Unnamed: 0'].to_list()
-    data[1] = df3['Unnamed: 3'].to_list()
-    data[2] = df3['Unnamed: 5'].to_list()
+    data[0] = df3['Unnamed: 0'].tolist()
+    data[1] = df3['Unnamed: 3'].tolist()
+    data[2] = df3['Unnamed: 5'].tolist()
     print('\n\n>>>')
+
+    """
     for i in range( 0,len(data[0])):
         print ( data[0][i], data[1][i] )
         
     print( '>>', data[2][0])
+    """
 
+    df10 = pd.DataFrame( data[0], columns = ['col1'] )
+    print( df10 )
+    print ("\n\n")
+    df10['col2' ] = data[1]
+    df10['col3'] = data[2]
+    print(df10)
 
 
     """

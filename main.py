@@ -1,6 +1,8 @@
 import pandas as pd # pip install openpyxl - проблема ушла
 import os # для os.chdir() и problem()
 import xlsxwriter
+import shutil                   # для модуля problem
+from zipfile import ZipFile     # для модуля problem
 
 
 PATH_TO_THE_FILES = {
@@ -35,8 +37,24 @@ def test():
             print(col, index, ' = ', value)
 
 
-import shutil
-from zipfile import ZipFile
+
+""" загружаем файл (read_excel) и ловим ошибку "There is no item named 'xl/sharedStrings.xml' in the archive" """
+def try_load( f ):
+    file_name = f
+    try:
+         DataFrame = pd.read_excel( file_name )
+         return DataFrame
+    except KeyError as Error:
+        if str(Error) == "\"There is no item named 'xl/sharedStrings.xml' in the archive\"":
+            problem( file_name )
+            print ('Исправлена ошибка: ', Error, f'в файле: \"{ file_name }\"\n' )
+            DataFrame = pd.read_excel(file_name)
+            return DataFrame
+        else:
+            print ( 'Ошибка: >>' + str(Error) + '<<' )
+
+
+
 
 # переименовывание файла 'SharedStrings.xml' в файл 'sharedStrings.xml' в архиве excel-файла filename
 def problem( filename ):
@@ -85,7 +103,7 @@ def preparation2( df2 ):
 
 def preparation3( df3 ):
     # удаляем ненужные столбцы
-    cols = [1,2,4,5]                    # 0, 3, 6
+    cols = [1,2,4,5]                                    # 0, 3, 6 - нужны эти столбцы
     df3.drop( df3.columns[cols], axis = 1, inplace=True )
 
     # удаляем ненужные строки первые 10
@@ -93,7 +111,7 @@ def preparation3( df3 ):
 
     # удаляем последнюю строку
     df3.drop(df3.tail(1).index, inplace=True)
-    return df1
+    return df3
 
 
 def andrew_task():
@@ -128,9 +146,16 @@ def andrew_task():
 
     df0 = df3
 
-    print( df3[ 'Unnamed: 0'])
+    #print( df3[ 'Unnamed: 0'])
 
-    #print( df0 )
+    # https://coderoad.ru/43544514/Pandas-%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D1%8F-%D1%8F%D1%87%D0%B5%D0%B9%D0%BA%D0%B8-Excel-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E
+
+    data = {}
+    data[0] = df3['Unnamed: 0'].to_list()
+    data[1] = df3['Unnamed: 3'].to_list()
+    print('\n\n>>>')
+    for i in range( 0,len(data[0])):
+        print ( data[0][i], data[1][i] )
 
 
 
@@ -164,24 +189,6 @@ def andrew_task():
 
     #for col in oDataFrame:
     
-
-# загружаем файл (read_excel) и ловим ошибку "There is no item named 'xl/sharedStrings.xml' in the archive"
-def try_load( f ):
-    file_name = f
-    try:
-         DataFrame = pd.read_excel( file_name )
-         return DataFrame
-    except KeyError as Error:
-        if str(Error) == "\"There is no item named 'xl/sharedStrings.xml' in the archive\"":
-            problem( file_name )
-            print ('Исправлена ошибка: ', Error, f'в файле: \"{ file_name }\"\n' )
-            DataFrame = pd.read_excel(file_name)
-            return DataFrame
-        else:
-            print ( 'Ошибка: >>' + str(Error) + '<<' )
-
-
-
 
 #test()
 andrew_task()

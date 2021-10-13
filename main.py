@@ -153,9 +153,12 @@ def andrew_task():
     data = {}
     data[0] = df3['Unnamed: 0'].to_list()
     data[1] = df3['Unnamed: 3'].to_list()
+    data[2] = df3['Unnamed: 5'].to_list()
     print('\n\n>>>')
     for i in range( 0,len(data[0])):
         print ( data[0][i], data[1][i] )
+        
+    print( '>>', data[2][0])
 
 
 

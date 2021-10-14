@@ -230,8 +230,8 @@ def andrew_task():
     df = df2_unique_vals
     # https://coderoad.ru/35003138/Python-Pandas-%D0%B2%D1%8B%D0%B2%D0%BE%D0%B4-%D1%82%D0%B8%D0%BF%D0%BE%D0%B2-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D1%86%D0%BE%D0%B2
 
-    print(pd.DataFrame(df.apply(pd.api.types.infer_dtype, axis=0)).reset_index().rename(
-        columns={'index': 'column', 0: 'type'}))
+    # print(pd.DataFrame(df.apply(pd.api.types.infer_dtype, axis=0)).reset_index().rename(
+    #    columns={'index': 'column', 0: 'type'}))
 
     """
     # поиск числовых столбцов
@@ -241,6 +241,10 @@ def andrew_task():
 
     # добавление столбца сумм по позициям
     # df = df2_unique_vals.append({'item_code': 'Total'}, ignore_index=True)
+
+    pd.options.mode.chained_assignment = None   # - костыль чтобы убрать ошибку:
+                                                # SettingWithCopyWarning:
+                                                # A value is trying to be set on a copy of a slice from a DataFrame
 
     df.loc['Total', '02_Car'] = df['02_Car'].sum(axis=0)
     df.loc['Total', '04_Victory'] = df['04_Victory'].sum(axis=0)

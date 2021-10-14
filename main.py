@@ -142,7 +142,7 @@ def preparation3(df3):
 
 
 def unique_values(df1, df2):
-    # получить уникальные значения, которые находятся только в df2 относительно df1
+    # получить уникальные значения df2 относительно df1, которые находятся только в df2
     df2_unique_vals = df2[~df2.item_code.isin(df1.item_code)]
 
     """
@@ -164,7 +164,7 @@ def unique_values(df1, df2):
 
 
 def equel_values(df1, df2):
-    # получить уникальные значения, которые находятся только в df2 относительно df1
+    # получить общие значения df2 относительно df1, которые находятся только в df2
     df2_equel_vals = df2[df2['item_code'].isin(df1['item_code'])]
 
     return df2_equel_vals

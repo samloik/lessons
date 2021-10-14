@@ -4,7 +4,7 @@ import xlsxwriter
 import openpyxl
 import shutil  # для модуля problem
 from zipfile import ZipFile  # для модуля problem
-import numpy as np # для поиска числовых столбцов
+import numpy as np  # для поиска числовых столбцов
 
 PATH_TO_THE_FILES = {
     'РАБОТА': 'C:\Andrew files',
@@ -171,7 +171,6 @@ def equel_values(df1, df2):
 
 
 def andrew_task():
-
     """ формируем имена файлов из пути и наименований """
     file_name1 = PATH + '\\' + IN_FILES[0]
     file_name2 = PATH + '\\' + IN_FILES[1]
@@ -205,7 +204,7 @@ def andrew_task():
     # https://pandas.pydata.org/docs/user_guide/merging.html
 
     # TODO --- нужно добавить склад-количество с неуникальными позициями
-    df2_equel_vals = equel_values(df1,df2)
+    df2_equel_vals = equel_values(df1, df2)
 
     print('\ndf1.item_code.count():', df1.item_code.count())
     print('df2.item_code.count():', df2.item_code.count())
@@ -214,9 +213,9 @@ def andrew_task():
     print('df2_concat_vals.ite_code.count()', df2_concat_vals.item_code.count())
 
     """ добавить суммы по столбцам """
-    #df2_unique_vals.loc[:, 'Total'] = df2_unique_vals.sum(axis=1)
+    # df2_unique_vals.loc[:, 'Total'] = df2_unique_vals.sum(axis=1)
 
-    #df2_unique_vals.append(df2_unique_vals.sum(numeric_only=True), ignore_index=True)
+    # df2_unique_vals.append(df2_unique_vals.sum(numeric_only=True), ignore_index=True)
     """
     df = df2_unique_vals
     df_numeric = df.select_dtypes(include=['int64', 'float64'])
@@ -227,11 +226,11 @@ def andrew_task():
 
     print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
-
     # поиск числовых столбцов
     df = df2_unique_vals
     # https://coderoad.ru/35003138/Python-Pandas-%D0%B2%D1%8B%D0%B2%D0%BE%D0%B4-%D1%82%D0%B8%D0%BF%D0%BE%D0%B2-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D1%86%D0%BE%D0%B2
-    print( pd.DataFrame(df.apply(pd.api.types.infer_dtype, axis=0)).reset_index().rename(
+
+    print(pd.DataFrame(df.apply(pd.api.types.infer_dtype, axis=0)).reset_index().rename(
         columns={'index': 'column', 0: 'type'}))
 
     """
@@ -239,13 +238,13 @@ def andrew_task():
     colnames_numerics_only = df.select_dtypes(include=np.number).columns.tolist()
     print( '\ncolnames_numerics_only:',colnames_numerics_only)
     """
-    
-    # добавление столбца сумм по позициям
-    df = df2_unique_vals.append({'item_code': 'Total'}, ignore_index=True)
 
-    df.loc['Total','02_Car']= df['02_Car'].sum(axis=0)
-    df.loc['Total','04_Victory']= df['04_Victory'].sum(axis=0)
-    df.loc['Total','08_Center']= df['08_Center'].sum(axis=0)
+    # добавление столбца сумм по позициям
+    # df = df2_unique_vals.append({'item_code': 'Total'}, ignore_index=True)
+
+    df.loc['Total', '02_Car'] = df['02_Car'].sum(axis=0)
+    df.loc['Total', '04_Victory'] = df['04_Victory'].sum(axis=0)
+    df.loc['Total', '08_Center'] = df['08_Center'].sum(axis=0)
 
     df2_unique_vals = df
 
@@ -266,7 +265,6 @@ def andrew_task():
     https://coderoad.ru/17326973/%D0%95%D1%81%D1%82%D1%8C-%D0%BB%D0%B8-%D1%81%D0%BF%D0%BE%D1%81%D0%BE%D0%B1-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D1%88%D0%B8%D1%80%D0%B8%D0%BD%D1%83-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D1%86%D0%BE%D0%B2-Excel-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E
     """
 
-
     """ Запись результатов обработки в excel файл2 для сравнения результатов"""
     with pd.ExcelWriter(file_name_out2) as writer:
         df2_unique_vals.to_excel(writer, sheet_name='unique_df')
@@ -274,8 +272,6 @@ def andrew_task():
         df1.to_excel(writer, sheet_name='df1')
         df2.to_excel(writer, sheet_name='df2')
         df3.to_excel(writer, sheet_name='df3')
-
-
 
     """
     df2_unique_vals.to_excel( file_name_out, sheet_name='unique_df' )

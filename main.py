@@ -183,7 +183,6 @@ def append_TOTAL( df, columns ):
 
 
 
-
 def andrew_task():
     """ формируем имена файлов из пути и наименований """
     file_name1 = PATH + '\\' + IN_FILES[0]
@@ -215,8 +214,10 @@ def andrew_task():
     # --- возможно неверное действие,
     # может быть нужен метод append( unique_values )
 
-
-
+    df2_merge_outer = pd.merge( df1, df2, on = ['item_code', 'Nomenclature'], how = 'outer')
+    df2_merge_inner = pd.merge(df1, df2, on=['item_code', 'Nomenclature'], how='inner')
+    df2_merge_RIN = pd.merge(df1, df2, on=['item_code', 'Nomenclature'], how='right')
+    df3_merge_outer = pd.merge(df2_merge_outer, df3, on = ['item_code', 'Nomenclature'], how = 'outer')
 
     # https://pandas.pydata.org/docs/user_guide/merging.html
 
@@ -241,7 +242,7 @@ def andrew_task():
     df2_unique_vals = df
     """
 
-    print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
+    # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
     # поиск числовых столбцов
     # df = df2_unique_vals
@@ -266,16 +267,44 @@ def andrew_task():
     append_TOTAL( df2_concat_vals, ['02_Car','04_Victory','08_Center'] )
 
 
-    print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
+    append_TOTAL(df2_merge_outer, ['05_Pavlovsky','02_Car', '04_Victory', '08_Center'])
+    append_TOTAL(df2_merge_inner, ['05_Pavlovsky','02_Car', '04_Victory', '08_Center'])
+    append_TOTAL(df2_merge_RIN, ['05_Pavlovsky', '02_Car', '04_Victory', '08_Center'])
+    append_TOTAL(df3_merge_outer, ['05_Pavlovsky', '02_Car', '04_Victory',
+                                   '08_Center','01_Kirova', '03_Inter', '09_Station'])
 
-    """ Запись результатов обработки в excel файл """
+    # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
+
+    writer = pd.ExcelWriter(file_name_out)
+    df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer')
+    workbook = writer.book
+    worksheet = writer.sheets['df3_merge_outer']
+    worksheet.set_column(1, 1, 11)
+    worksheet.set_column(2, 2, 100)
+    worksheet.set_column(3, 9, 10)
+    writer.save()
+
+    #print( '\n>>>', df3_merge_outer.describe(include='all') )
+    #ddf3 = df3_merge_outer['Nomenclature'].unique()
+
+    #print("\nddf3>>>", ddf3.describe(include='all'))
+
+
+    """ Запись результатов обработки в excel файл 
     with pd.ExcelWriter(file_name_out) as writer:
+        df2_merge_outer.to_excel(writer, sheet_name='df2_merge_outer')
+        df2_merge_inner.to_excel(writer, sheet_name='df2_merge_inner')
+        df2_merge_RIN.to_excel(writer, sheet_name='df2_merge_RIN')
+        #df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer')
+        
         df2_unique_vals.to_excel(writer, sheet_name='unique_df')
         df2_equel_vals.to_excel(writer, sheet_name='equel_df')
         df2_concat_vals.to_excel(writer, sheet_name='concat_df')
         df1.to_excel(writer, sheet_name='df1')
         df2.to_excel(writer, sheet_name='df2')
         df3.to_excel(writer, sheet_name='df3')
+    """
+
 
     """
     информация по методу изменения ширины столбцов

@@ -228,6 +228,7 @@ def andrew_task():
     print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
 
+    # поиск числовых столбцов
     df = df2_unique_vals
     # https://coderoad.ru/35003138/Python-Pandas-%D0%B2%D1%8B%D0%B2%D0%BE%D0%B4-%D1%82%D0%B8%D0%BF%D0%BE%D0%B2-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D1%86%D0%BE%D0%B2
     print( pd.DataFrame(df.apply(pd.api.types.infer_dtype, axis=0)).reset_index().rename(

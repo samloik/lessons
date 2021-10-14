@@ -170,23 +170,13 @@ def equel_values(df1, df2):
 
 
 def andrew_task():
-    """ временный вывод имен для контроля """
-    print('IN_FILES\n', IN_FILES)
-    print('\nOUT_FILES\n', OUT_FILES)
 
-    # формируем имена файлов из пути и наименований
+    """ формируем имена файлов из пути и наименований """
     file_name1 = PATH + '\\' + IN_FILES[0]
     file_name2 = PATH + '\\' + IN_FILES[1]
     file_name3 = PATH + '\\' + IN_FILES[2]
     file_name_out = PATH + '\\' + OUT_FILES[0]
     file_name_out2 = PATH + '\\' + OUT_FILES[1]
-
-    """ временный вывод имен для контроля """
-    print(file_name1)
-    print(file_name2)
-    print(file_name3)
-    print(file_name_out)
-    print('\n')
 
     os.chdir(PATH)
 
@@ -199,9 +189,6 @@ def andrew_task():
     df1 = preparation1(df1)  # 0, 3, 6    - нужны, 1,2,4,5 - удалить
     df2 = preparation2(df2)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
     df3 = preparation3(df3)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
-
-    print(df3)
-    print('\n\n>>>')
 
     """ получить как уникальные значения, которые находятся только в df2 """
     df2_unique_vals = unique_values(df1, df2)

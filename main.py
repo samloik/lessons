@@ -169,6 +169,20 @@ def equel_values(df1, df2):
 
     return df2_equel_vals
 
+def append_TOTAL( df, columns ):
+    """ добавление строчки ИТОГО в конец колонки склада со значением суммы """
+
+    # - костыль чтобы убрать ошибку:
+    # SettingWithCopyWarning: A value is trying to be set on a copy of a slice from a DataFrame
+    # https://coderoad.ru/20625582/%D0%9A%D0%B0%D0%BA-%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C%D1%81%D1%8F-%D1%81-SettingWithCopyWarning-%D0%B2-Pandas
+
+    pd.options.mode.chained_assignment = None
+
+    for column in columns:
+        df.loc['Total', column ] = df[column].sum(axis=0)
+
+
+
 
 def andrew_task():
     """ формируем имена файлов из пути и наименований """
@@ -201,6 +215,9 @@ def andrew_task():
     # --- возможно неверное действие,
     # может быть нужен метод append( unique_values )
 
+
+
+
     # https://pandas.pydata.org/docs/user_guide/merging.html
 
     # TODO --- нужно добавить склад-количество с неуникальными позициями
@@ -227,7 +244,7 @@ def andrew_task():
     print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
     # поиск числовых столбцов
-    df = df2_unique_vals
+    # df = df2_unique_vals
     # https://coderoad.ru/35003138/Python-Pandas-%D0%B2%D1%8B%D0%B2%D0%BE%D0%B4-%D1%82%D0%B8%D0%BF%D0%BE%D0%B2-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D1%86%D0%BE%D0%B2
 
     # print(pd.DataFrame(df.apply(pd.api.types.infer_dtype, axis=0)).reset_index().rename(
@@ -239,19 +256,15 @@ def andrew_task():
     print( '\ncolnames_numerics_only:',colnames_numerics_only)
     """
 
-    # добавление столбца сумм по позициям
-    # df = df2_unique_vals.append({'item_code': 'Total'}, ignore_index=True)
 
-    pd.options.mode.chained_assignment = None   # - костыль чтобы убрать ошибку:
-                                                # SettingWithCopyWarning:
-                                                # A value is trying to be set on a copy of a slice from a DataFrame
-    # https://coderoad.ru/20625582/%D0%9A%D0%B0%D0%BA-%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C%D1%81%D1%8F-%D1%81-SettingWithCopyWarning-%D0%B2-Pandas
+    """ добавление строчек ИТОГО в конец колонки склада со значением суммы """
+    append_TOTAL(df1, ['05_Pavlovsky'])
+    append_TOTAL(df2, ['02_Car','04_Victory','08_Center'] )
+    append_TOTAL(df3, ['01_Kirova', '03_Inter', '09_Station'])
+    append_TOTAL( df2_unique_vals, ['02_Car','04_Victory','08_Center'] )
+    append_TOTAL( df2_equel_vals, ['02_Car','04_Victory','08_Center'] )
+    append_TOTAL( df2_concat_vals, ['02_Car','04_Victory','08_Center'] )
 
-    df.loc['Total', '02_Car'] = df['02_Car'].sum(axis=0)
-    df.loc['Total', '04_Victory'] = df['04_Victory'].sum(axis=0)
-    df.loc['Total', '08_Center'] = df['08_Center'].sum(axis=0)
-
-    df2_unique_vals = df
 
     print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 

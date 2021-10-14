@@ -141,3 +141,4 @@ https://coderoad.ru/17326973/%D0%95%D1%81%D1%82%D1%8C-%D0%BB%D0%B8-%D1%81%D0%BF%
     df.loc['Total','08_Center']= df['08_Center'].sum(axis=0)
 
     df2_unique_vals = df
+

@@ -240,7 +240,6 @@ def andrew_task():
     print( '\ncolnames_numerics_only:',colnames_numerics_only)
     """
     
-
     # добавление столбца сумм по позициям
     df = df2_unique_vals.append({'item_code': 'Total'}, ignore_index=True)
 

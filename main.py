@@ -19,7 +19,8 @@ IN_FILES = [
 ]
 
 OUT_FILES = [
-    'общий.xlsx'
+    'общий.xlsx',
+    'общий2.xlsx'
 ]
 
 
@@ -87,7 +88,7 @@ def preparation1(df1):
     df1.drop(df1.tail(1).index, inplace=True)
 
     # переименовываем столбцы
-    df1 = df1.rename(columns={'Unnamed: 0': 'item_code' })
+    df1 = df1.rename(columns={'Unnamed: 0': 'item_code'})
     df1 = df1.rename(columns={'Unnamed: 3': 'Nomenclature'})
     df1 = df1.rename(columns={'Unnamed: 6': '05_Pavlovsky'})
 
@@ -108,7 +109,7 @@ def preparation2(df2):
     df2.drop(df2.tail(1).index, inplace=True)
 
     # переименовываем столбцы
-    df2 = df2.rename(columns={'Unnamed: 0': 'item_code' })
+    df2 = df2.rename(columns={'Unnamed: 0': 'item_code'})
     df2 = df2.rename(columns={'Unnamed: 3': 'Nomenclature'})
     df2 = df2.rename(columns={'Unnamed: 5': '02_Car'})
     df2 = df2.rename(columns={'Unnamed: 7': '04_Victory'})
@@ -130,7 +131,7 @@ def preparation3(df3):
 
     # переименовываем столбцы
 
-    df3 = df3.rename(columns={'Unnamed: 0': 'item_code' })
+    df3 = df3.rename(columns={'Unnamed: 0': 'item_code'})
     df3 = df3.rename(columns={'Unnamed: 3': 'Nomenclature'})
     df3 = df3.rename(columns={'Unnamed: 5': '01_Kirova'})
     df3 = df3.rename(columns={'Unnamed: 7': '03_Inter'})
@@ -139,9 +140,7 @@ def preparation3(df3):
     return df3
 
 
-
-def unique_values( df1, df2 ):
-
+def unique_values(df1, df2):
     # получить уникальные значения, которые находятся только в df2 относительно df1
     df2_unique_vals = df2[~df2.item_code.isin(df1.item_code)]
 
@@ -163,6 +162,13 @@ def unique_values( df1, df2 ):
     return df2_unique_vals
 
 
+def equel_values(df1, df2):
+    # получить уникальные значения, которые находятся только в df2 относительно df1
+    df2_equel_vals = df2[df2['item_code'].isin(df1['item_code'])]
+
+    return df2_equel_vals
+
+
 def andrew_task():
     """ временный вывод имен для контроля """
     print('IN_FILES\n', IN_FILES)
@@ -173,6 +179,7 @@ def andrew_task():
     file_name2 = PATH + '\\' + IN_FILES[1]
     file_name3 = PATH + '\\' + IN_FILES[2]
     file_name_out = PATH + '\\' + OUT_FILES[0]
+    file_name_out2 = PATH + '\\' + OUT_FILES[1]
 
     """ временный вывод имен для контроля """
     print(file_name1)
@@ -193,30 +200,32 @@ def andrew_task():
     df2 = preparation2(df2)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
     df3 = preparation3(df3)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
 
-    print( df3 )
+    print(df3)
     print('\n\n>>>')
 
-
     """ получить как уникальные значения, которые находятся только в df2 """
-    df2_unique_vals = unique_values( df1, df2)
+    df2_unique_vals = unique_values(df1, df2)
 
     # https: // pandas.pydata.org / docs / user_guide / merging.html
     # Merge, join, concatenate and compare
 
     # --- добавлены новые столбцы с уникальными позициями
-    #  df2_concat_vals = pd.concat([df1, df2_unique_vals], ignore_index=True, sort=False)
+    df2_concat_vals = pd.concat([df1, df2_unique_vals], ignore_index=True, sort=False)
     # --- возможно неверное действие,
     # может быть нужен метод append( unique_values )
 
     # https://pandas.pydata.org/docs/user_guide/merging.html
 
-
     # TODO --- нужно добавить склад-количество с неуникальными позициями
+    df2_equel_vals = equel_values(df1,df2)
 
-
+    print('\ndf1.item_code.count():', df1.item_code.count())
+    print('df2.item_code.count():', df2.item_code.count())
+    print('df2_unique_vals.item_code.count():', df2_unique_vals.item_code.count())
+    print('df2_equel_vals.item_code.count():', df2_equel_vals.item_code.count())
+    print('df2_concat_vals.ite_code.count()', df2_concat_vals.item_code.count())
 
     """ Запись результатов обработки в excel файл """
-
     with pd.ExcelWriter(file_name_out) as writer:
         df2_unique_vals.to_excel(writer, sheet_name='unique_df')
         df2_concat_vals.to_excel(writer, sheet_name='concat_df')
@@ -224,6 +233,13 @@ def andrew_task():
         df2.to_excel(writer, sheet_name='df2')
         df3.to_excel(writer, sheet_name='df3')
 
+    """ Запись результатов обработки в excel файл2  для сравнения результатов"""
+    with pd.ExcelWriter(file_name_out2) as writer:
+        df2_unique_vals.to_excel(writer, sheet_name='unique_df')
+        df2_concat_vals.to_excel(writer, sheet_name='concat_df')
+        df1.to_excel(writer, sheet_name='df1')
+        df2.to_excel(writer, sheet_name='df2')
+        df3.to_excel(writer, sheet_name='df3')
 
     """
     df2_unique_vals.to_excel( file_name_out, sheet_name='unique_df' )
@@ -231,7 +247,7 @@ def andrew_task():
     df2.to_excel(file_name_out, sheet_name='df2')
     """
 
-    #print(df10)
+    # print(df10)
 
     """
     # создание файла для записи - тест

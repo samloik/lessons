@@ -215,6 +215,7 @@ def andrew_task():
     """ Запись результатов обработки в excel файл """
     with pd.ExcelWriter(file_name_out) as writer:
         df2_unique_vals.to_excel(writer, sheet_name='unique_df')
+        df2_equel_vals.to_excel(writer, sheet_name='equel_df')
         df2_concat_vals.to_excel(writer, sheet_name='concat_df')
         df1.to_excel(writer, sheet_name='df1')
         df2.to_excel(writer, sheet_name='df2')

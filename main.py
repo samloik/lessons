@@ -245,6 +245,7 @@ def andrew_task():
     pd.options.mode.chained_assignment = None   # - костыль чтобы убрать ошибку:
                                                 # SettingWithCopyWarning:
                                                 # A value is trying to be set on a copy of a slice from a DataFrame
+    # https://coderoad.ru/20625582/%D0%9A%D0%B0%D0%BA-%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C%D1%81%D1%8F-%D1%81-SettingWithCopyWarning-%D0%B2-Pandas
 
     df.loc['Total', '02_Car'] = df['02_Car'].sum(axis=0)
     df.loc['Total', '04_Victory'] = df['04_Victory'].sum(axis=0)

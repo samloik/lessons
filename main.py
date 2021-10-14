@@ -212,6 +212,42 @@ def andrew_task():
     print('df2_equel_vals.item_code.count():', df2_equel_vals.item_code.count())
     print('df2_concat_vals.ite_code.count()', df2_concat_vals.item_code.count())
 
+    """ добавить суммы по столбцам """
+    #df2_unique_vals.loc[:, 'Total'] = df2_unique_vals.sum(axis=1)
+
+    #df2_unique_vals.append(df2_unique_vals.sum(numeric_only=True), ignore_index=True)
+    """
+    df = df2_unique_vals
+    df_numeric = df.select_dtypes(include=['int64', 'float64'])
+    df_num_cols = df_numeric.columns
+    df.loc['Total'] = pd.Series(df[df_num_cols].sum(), index=[df_num_cols])
+    df2_unique_vals = df
+    """
+
+    print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
+
+    # добавление столбца сумм по позициям
+    #df = df.append({'02_Car': df['02_Car'].sum()}, ignore_index=True)
+
+    df = df2_unique_vals
+    #df2_unique_vals.loc["Total", "02_Car"] = df2_unique_vals['02_Car'].sum()
+    df.loc[:, 'Total'] = df.sum(axis=1)
+    df2_unique_vals = df
+    """
+    df = df2_unique_vals
+    sums = df.select_dtypes(pd.np.number).sum().rename('total')
+    df.append(sums)
+    df2_unique_vals = df
+    """
+
+    """
+    df2_unique_vals = df2_unique_vals.append({'02_Car': df2_unique_vals['02_Car'].sum()}, ignore_index=True)
+    df2_unique_vals = df2_unique_vals.append({'04_Victory': df2_unique_vals['04_Victory'].sum()}, ignore_index=True)
+    df2_unique_vals = df2_unique_vals.append({'08_Center': df2_unique_vals['08_Center'].sum()}, ignore_index=True)
+    """
+
+    print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
+
     """ Запись результатов обработки в excel файл """
     with pd.ExcelWriter(file_name_out) as writer:
         df2_unique_vals.to_excel(writer, sheet_name='unique_df')

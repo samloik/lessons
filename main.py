@@ -233,13 +233,18 @@ def andrew_task():
         df2.to_excel(writer, sheet_name='df2')
         df3.to_excel(writer, sheet_name='df3')
 
-    """ Запись результатов обработки в excel файл2  для сравнения результатов"""
+
+
+
+    """ Запись результатов обработки в excel файл2 для сравнения результатов"""
     with pd.ExcelWriter(file_name_out2) as writer:
         df2_unique_vals.to_excel(writer, sheet_name='unique_df')
         df2_concat_vals.to_excel(writer, sheet_name='concat_df')
         df1.to_excel(writer, sheet_name='df1')
         df2.to_excel(writer, sheet_name='df2')
         df3.to_excel(writer, sheet_name='df3')
+
+
 
     """
     df2_unique_vals.to_excel( file_name_out, sheet_name='unique_df' )

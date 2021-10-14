@@ -231,7 +231,12 @@ def andrew_task():
 
     df = df2_unique_vals
     #df2_unique_vals.loc["Total", "02_Car"] = df2_unique_vals['02_Car'].sum()
-    df.loc[:, 'Total'] = df.sum(axis=1)
+    #df.loc[:, 'Total'] = df.sum(axis=1)
+
+    # https://overcoder.net/q/558395/%D0%BA%D0%B0%D0%BA-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%82%D1%8C-%D1%81%D1%82%D1%80%D0%BE%D0%BA%D1%83-%D1%81%D1%83%D0%BC%D0%BC%D1%8B-%D0%B8-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D0%B5%D1%86-%D1%81%D1%83%D0%BC%D0%BC%D1%8B-%D0%B2-%D0%BF%D0%B0%D0%BD%D0%B4%D0%B0%D1%85
+
+    df.loc['Total',:]= df.sum(axis=0)
+
     df2_unique_vals = df
     """
     df = df2_unique_vals

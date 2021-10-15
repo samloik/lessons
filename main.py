@@ -275,6 +275,10 @@ def andrew_task():
 
     # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
+    #df3_merge_outer.index = pd.date_range( '1900/1/30', periods = df3_merge_outer.shape[0] )
+
+    print( 'df3_merge_outer[Nomenclature].unique() >>>', df3_merge_outer['Nomenclature'].nunique())
+
     writer = pd.ExcelWriter(file_name_out)
     df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer')
     workbook = writer.book

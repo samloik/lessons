@@ -1,5 +1,6 @@
 import pandas as pd  # pip install openpyxl - проблема ушла
 import os  # для os.chdir() и problem()
+import glob
 import xlsxwriter
 import openpyxl
 import shutil  # для модуля problem
@@ -23,6 +24,7 @@ OUT_FILES = [
     'общий.xlsx',
     'общий2.xlsx'
 ]
+
 
 
 # тест функции enumerate
@@ -75,6 +77,24 @@ def problem(filename):
     shutil.make_archive(filename, 'zip', tmp_folder)
     os.remove(filename)
     os.rename(filename + '.zip', filename)
+
+
+    """ удалить папку tmp и все вложения
+    files = glob.glob(tmp_folder+'**/*.*', recursive=True)
+    print( "tmp_folder+'/**/*.*' >>> ",tmp_folder+'**/*.*' )
+
+    for f in files:
+        try:
+            os.remove(f)
+        except OSError as e:
+            print("Error: %s : %s" % (f, e.strerror))
+
+    try:
+        os.rmdir(tmp_folder)
+    except OSError as e:
+        print("Error: %s : %s" % (tmp_folder, e.strerror))
+    """
+
 
 
 def preparation1(df1):
@@ -208,26 +228,14 @@ def andrew_task():
     df3 = preparation3(df3)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
 
     """ получить как уникальные значения, которые находятся только в df2 """
-    df2_unique_vals = unique_values(df1, df2)
 
     # https: // pandas.pydata.org / docs / user_guide / merging.html
     # Merge, join, concatenate and compare
 
     # --- добавлены новые столбцы с уникальными позициями
-    df2_concat_vals = pd.concat([df1, df2_unique_vals], ignore_index=True, sort=False)
-    # --- возможно неверное действие,
-    # может быть нужен метод append( unique_values )
 
     df2_merge_outer = pd.merge( df1, df2, on = ['item_code', 'Nomenclature'], how = 'outer')
-    df2_merge_inner = pd.merge(df1, df2, on=['item_code', 'Nomenclature'], how='inner')
-    df2_merge_RIN = pd.merge(df1, df2, on=['item_code', 'Nomenclature'], how='right')
     df3_merge_outer = pd.merge(df2_merge_outer, df3, on = ['item_code', 'Nomenclature'], how = 'outer')
-
-    print('\ndf1.item_code.count():', df1.item_code.count())
-    print('df2.item_code.count():', df2.item_code.count())
-    print('df2_unique_vals.item_code.count():', df2_unique_vals.item_code.count())
-    print('df2_equel_vals.item_code.count():', df2_equel_vals.item_code.count())
-    print('df2_concat_vals.ite_code.count()', df2_concat_vals.item_code.count())
 
     # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
@@ -249,21 +257,15 @@ def andrew_task():
     df1 = append_TOTAL(df1, ['05_Pavlovsky'])
     df2 = append_TOTAL(df2, ['02_Car','04_Victory','08_Center'] )
     df3 = append_TOTAL(df3, ['01_Kirova', '03_Inter', '09_Station'])
-    df2_unique_vals = append_TOTAL( df2_unique_vals, ['02_Car','04_Victory','08_Center'] )
-    df2_equel_vals = append_TOTAL( df2_equel_vals, ['02_Car','04_Victory','08_Center'] )
-    df2_concat_vals = append_TOTAL( df2_concat_vals, ['02_Car','04_Victory','08_Center'] )
 
-
-    df2_merge_outer = append_TOTAL(df2_merge_outer, ['05_Pavlovsky','02_Car', '04_Victory', '08_Center'])
-    df2_merge_inner = append_TOTAL(df2_merge_inner, ['05_Pavlovsky','02_Car', '04_Victory', '08_Center'])
-    df2_merge_RIN = append_TOTAL(df2_merge_RIN, ['05_Pavlovsky', '02_Car', '04_Victory', '08_Center'])
     df3_merge_outer = append_TOTAL(df3_merge_outer, ['05_Pavlovsky', '02_Car', '04_Victory',
                                    '08_Center','01_Kirova', '03_Inter', '09_Station'])
 
-    # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
+    # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
     #df3_merge_outer.index = pd.date_range( '1900/1/30', periods = df3_merge_outer.shape[0] )
 
+    print( r'df3_merge_outer.shape[0]>>',df3_merge_outer.shape[0])
     print( 'df3_merge_outer[Nomenclature].unique() >>>', df3_merge_outer['Nomenclature'].nunique())
 
     #
@@ -289,13 +291,7 @@ def andrew_task():
     """ Запись результатов обработки в excel файл 
     with pd.ExcelWriter(file_name_out) as writer:
         df2_merge_outer.to_excel(writer, sheet_name='df2_merge_outer')
-        df2_merge_inner.to_excel(writer, sheet_name='df2_merge_inner')
-        df2_merge_RIN.to_excel(writer, sheet_name='df2_merge_RIN')
-        #df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer')
         
-        df2_unique_vals.to_excel(writer, sheet_name='unique_df')
-        df2_equel_vals.to_excel(writer, sheet_name='equel_df')
-        df2_concat_vals.to_excel(writer, sheet_name='concat_df')
         df1.to_excel(writer, sheet_name='df1')
         df2.to_excel(writer, sheet_name='df2')
         df3.to_excel(writer, sheet_name='df3')
@@ -308,19 +304,6 @@ def andrew_task():
     https://coderoad.ru/17326973/%D0%95%D1%81%D1%82%D1%8C-%D0%BB%D0%B8-%D1%81%D0%BF%D0%BE%D1%81%D0%BE%D0%B1-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D1%88%D0%B8%D1%80%D0%B8%D0%BD%D1%83-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D1%86%D0%BE%D0%B2-Excel-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E
     """
 
-    """ Запись результатов обработки в excel файл2 для сравнения результатов"""
-    with pd.ExcelWriter(file_name_out2) as writer:
-        df2_unique_vals.to_excel(writer, sheet_name='unique_df')
-        df2_concat_vals.to_excel(writer, sheet_name='concat_df')
-        df1.to_excel(writer, sheet_name='df1')
-        df2.to_excel(writer, sheet_name='df2')
-        df3.to_excel(writer, sheet_name='df3')
-
-    """
-    df2_unique_vals.to_excel( file_name_out, sheet_name='unique_df' )
-    df1.to_excel(file_name_out, sheet_name='df1')
-    df2.to_excel(file_name_out, sheet_name='df2')
-    """
 
     # print(df10)
 

@@ -223,28 +223,11 @@ def andrew_task():
     df2_merge_RIN = pd.merge(df1, df2, on=['item_code', 'Nomenclature'], how='right')
     df3_merge_outer = pd.merge(df2_merge_outer, df3, on = ['item_code', 'Nomenclature'], how = 'outer')
 
-    # https://pandas.pydata.org/docs/user_guide/merging.html
-
-    # TODO --- нужно добавить склад-количество с неуникальными позициями
-    df2_equel_vals = equel_values(df1, df2)
-
     print('\ndf1.item_code.count():', df1.item_code.count())
     print('df2.item_code.count():', df2.item_code.count())
     print('df2_unique_vals.item_code.count():', df2_unique_vals.item_code.count())
     print('df2_equel_vals.item_code.count():', df2_equel_vals.item_code.count())
     print('df2_concat_vals.ite_code.count()', df2_concat_vals.item_code.count())
-
-    """ добавить суммы по столбцам """
-    # df2_unique_vals.loc[:, 'Total'] = df2_unique_vals.sum(axis=1)
-
-    # df2_unique_vals.append(df2_unique_vals.sum(numeric_only=True), ignore_index=True)
-    """
-    df = df2_unique_vals
-    df_numeric = df.select_dtypes(include=['int64', 'float64'])
-    df_num_cols = df_numeric.columns
-    df.loc['Total'] = pd.Series(df[df_num_cols].sum(), index=[df_num_cols])
-    df2_unique_vals = df
-    """
 
     # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
@@ -286,6 +269,7 @@ def andrew_task():
     #
     #df3_merge_outer = df3_merge_outer.append({'item_code': 'TotalTOTAL'}, ignore_index=True)
 
+
     writer = pd.ExcelWriter(file_name_out)
     df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer')
     workbook = writer.book
@@ -294,6 +278,7 @@ def andrew_task():
     worksheet.set_column(2, 2, 100)
     worksheet.set_column(3, 9, 10)
     writer.save()
+
 
     #print( '\n>>>', df3_merge_outer.describe(include='all') )
     #ddf3 = df3_merge_outer['Nomenclature'].unique()

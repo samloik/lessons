@@ -178,8 +178,12 @@ def append_TOTAL( df, columns ):
 
     pd.options.mode.chained_assignment = None
 
+    df = df.append({'item_code': 'Total'}, ignore_index=True)
+
     for column in columns:
-        df.loc['Total', column ] = df[column].sum(axis=0)
+        df.loc[(df['item_code']=='Total'),column] = df[column].sum(axis=0)
+
+    return df
 
 
 
@@ -259,18 +263,18 @@ def andrew_task():
 
 
     """ добавление строчек ИТОГО в конец колонки склада со значением суммы """
-    append_TOTAL(df1, ['05_Pavlovsky'])
-    append_TOTAL(df2, ['02_Car','04_Victory','08_Center'] )
-    append_TOTAL(df3, ['01_Kirova', '03_Inter', '09_Station'])
-    append_TOTAL( df2_unique_vals, ['02_Car','04_Victory','08_Center'] )
-    append_TOTAL( df2_equel_vals, ['02_Car','04_Victory','08_Center'] )
-    append_TOTAL( df2_concat_vals, ['02_Car','04_Victory','08_Center'] )
+    df1 = append_TOTAL(df1, ['05_Pavlovsky'])
+    df2 = append_TOTAL(df2, ['02_Car','04_Victory','08_Center'] )
+    df3 = append_TOTAL(df3, ['01_Kirova', '03_Inter', '09_Station'])
+    df2_unique_vals = append_TOTAL( df2_unique_vals, ['02_Car','04_Victory','08_Center'] )
+    df2_equel_vals = append_TOTAL( df2_equel_vals, ['02_Car','04_Victory','08_Center'] )
+    df2_concat_vals = append_TOTAL( df2_concat_vals, ['02_Car','04_Victory','08_Center'] )
 
 
-    append_TOTAL(df2_merge_outer, ['05_Pavlovsky','02_Car', '04_Victory', '08_Center'])
-    append_TOTAL(df2_merge_inner, ['05_Pavlovsky','02_Car', '04_Victory', '08_Center'])
-    append_TOTAL(df2_merge_RIN, ['05_Pavlovsky', '02_Car', '04_Victory', '08_Center'])
-    append_TOTAL(df3_merge_outer, ['05_Pavlovsky', '02_Car', '04_Victory',
+    df2_merge_outer = append_TOTAL(df2_merge_outer, ['05_Pavlovsky','02_Car', '04_Victory', '08_Center'])
+    df2_merge_inner = append_TOTAL(df2_merge_inner, ['05_Pavlovsky','02_Car', '04_Victory', '08_Center'])
+    df2_merge_RIN = append_TOTAL(df2_merge_RIN, ['05_Pavlovsky', '02_Car', '04_Victory', '08_Center'])
+    df3_merge_outer = append_TOTAL(df3_merge_outer, ['05_Pavlovsky', '02_Car', '04_Victory',
                                    '08_Center','01_Kirova', '03_Inter', '09_Station'])
 
     # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
@@ -278,6 +282,9 @@ def andrew_task():
     #df3_merge_outer.index = pd.date_range( '1900/1/30', periods = df3_merge_outer.shape[0] )
 
     print( 'df3_merge_outer[Nomenclature].unique() >>>', df3_merge_outer['Nomenclature'].nunique())
+
+    #
+    #df3_merge_outer = df3_merge_outer.append({'item_code': 'TotalTOTAL'}, ignore_index=True)
 
     writer = pd.ExcelWriter(file_name_out)
     df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer')

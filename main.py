@@ -1,4 +1,3 @@
-
 import pandas as pd  # pip install openpyxl - проблема ушла
 import os  # для os.chdir() и problem()
 import xlsxwriter

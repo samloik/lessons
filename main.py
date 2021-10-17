@@ -111,8 +111,35 @@ def problem(filename):
         print("Error: %s : %s" % (tmp_folder, e.strerror))
     """
 
-
 def preparation1(df1):
+
+    #print("df1['Номенклатура.Код']: \n", df1.loc[df1['Unnamed: 0'] == 'Номенклатура.Код'] )
+
+    df = df1.loc[df1['Unnamed: 0'] == 'Номенклатура.Код']
+    StrIndex = df1.loc[df1['Unnamed: 0'] == 'Номенклатура.Код'].index[0]
+
+    maxcol = len(df.columns)
+
+    for col in range(maxcol):
+        name = df.iloc[0,col]
+        if not name or pd.isnull(name):
+            # удаляем ненужные столбцы
+            df1.drop(columns=['Unnamed: '+str(col)], axis=1, inplace=True)
+        else:
+            # переименовываем столбцы
+            df1 = df1.rename(columns={('Unnamed: '+str(col)): name})
+
+
+    # удаляем ненужные строки первые
+    df1.drop(df1.head(StrIndex+2).index, inplace=True)
+
+    # удаляем последнюю строку
+    df1.drop(df1.tail(1).index, inplace=True)
+    return df1
+
+
+
+def preparation01(df1):
     # удаляем ненужные столбцы
     cols = [1, 2, 4, 5]  # 0, 3, 6
     df1.drop(df1.columns[cols], axis=1, inplace=True)
@@ -124,8 +151,8 @@ def preparation1(df1):
     df1.drop(df1.tail(1).index, inplace=True)
 
     # переименовываем столбцы
-    df1 = df1.rename(columns={'Unnamed: 0': 'item_code'})
-    df1 = df1.rename(columns={'Unnamed: 3': 'Nomenclature'})
+    df1 = df1.rename(columns={'Unnamed: 0': 'Номенклатура.Код'})
+    df1 = df1.rename(columns={'Unnamed: 3': 'Номенклатура'})
     df1 = df1.rename(columns={'Unnamed: 6': '05_Pavlovsky'})
 
     return df1
@@ -145,8 +172,8 @@ def preparation2(df2):
     df2.drop(df2.tail(1).index, inplace=True)
 
     # переименовываем столбцы
-    df2 = df2.rename(columns={'Unnamed: 0': 'item_code'})
-    df2 = df2.rename(columns={'Unnamed: 3': 'Nomenclature'})
+    df2 = df2.rename(columns={'Unnamed: 0': 'Номенклатура.Код'})
+    df2 = df2.rename(columns={'Unnamed: 3': 'Номенклатура'})
     df2 = df2.rename(columns={'Unnamed: 5': '02_Car'})
     df2 = df2.rename(columns={'Unnamed: 7': '04_Victory'})
     df2 = df2.rename(columns={'Unnamed: 8': '08_Center'})
@@ -167,8 +194,8 @@ def preparation3(df3):
 
     # переименовываем столбцы
 
-    df3 = df3.rename(columns={'Unnamed: 0': 'item_code'})
-    df3 = df3.rename(columns={'Unnamed: 3': 'Nomenclature'})
+    df3 = df3.rename(columns={'Unnamed: 0': 'Номенклатура.Код'})
+    df3 = df3.rename(columns={'Unnamed: 3': 'Номенклатура'})
     df3 = df3.rename(columns={'Unnamed: 5': '01_Kirova'})
     df3 = df3.rename(columns={'Unnamed: 7': '03_Inter'})
     df3 = df3.rename(columns={'Unnamed: 8': '09_Station'})
@@ -178,20 +205,20 @@ def preparation3(df3):
 
 def unique_values(df1, df2):
     # получить уникальные значения df2 относительно df1, которые находятся только в df2
-    df2_unique_vals = df2[~df2.item_code.isin(df1.item_code)]
+    df2_unique_vals = df2[~df2['Номенклатура.Код'].isin(df1['Номенклатура.Код'])]
 
     """
     # получить уникальные значения, которые находятся только в df1
-    df1_unique_vals = df1[~df1.item_code.isin(df2.item_code)]
+    df1_unique_vals = df1[~df1['Номенклатура.Код'].isin(df2['Номенклатура.Код'])]
     
     # получить как неуникальные значения, которые находятся только в df1
-    df1_unique_vals = df1[df1.item_code.isin(df2.item_code)]
+    df1_unique_vals = df1[df1['Номенклатура.Код'].isin(df2['Номенклатура.Код'])]
 
     Чтобы получить как значения, которые находятся только в df1, 
     так и значения, которые находятся только в df2, 
     вы можете сделать это
 
-    df_unique_vals = df1[~df1.item_code.isin(df2.item_code)].append(df2[~df2.item_code.isin(df1.item_code)], ignore_index=True)
+    df_unique_vals = df1[~df1['Номенклатура.Код'].isin(df2['Номенклатура.Код'])].append(df2[~df2.['Номенклатура.Код'].isin(df1.['Номенклатура.Код'])], ignore_index=True)
 
     """
 
@@ -200,12 +227,12 @@ def unique_values(df1, df2):
 
 def equel_values(df1, df2):
     # получить общие значения df2 относительно df1, которые находятся только в df2
-    df2_equel_vals = df2[df2['item_code'].isin(df1['item_code'])]
+    df2_equel_vals = df2[df2['Номенклатура.Код'].isin(df1['Номенклатура.Код'])]
 
     return df2_equel_vals
 
 
-def append_TOTAL(df, columns):
+def append_TOTAL(df ):
     """ добавление строчки ИТОГО в конец колонки склада со значением суммы """
 
     # - костыль чтобы убрать ошибку:
@@ -214,10 +241,23 @@ def append_TOTAL(df, columns):
 
     pd.options.mode.chained_assignment = None
 
-    df = df.append({'item_code': 'Total'}, ignore_index=True)
+    df = df.append({'Номенклатура.Код': 'Итого'}, ignore_index=True)
 
-    for column in columns:
-        df.loc[(df['item_code'] == 'Total'), column] = df[column].sum(axis=0)
+    maxcol = len(df.columns)
+
+    #print( "df.loc[df['Unnamed: 0'] == 'Номенклатура.Код'].index",
+    #       df.loc[df['Unnamed: 0'] == 'Номенклатура.Код'].index)
+    print(len(df.columns) )
+    print(df.columns)
+
+    row = df[(df['Номенклатура.Код'] == 'Итого')].index[0]
+
+    print( 'row: \n', row)
+    print( df.iloc[row, 0])
+    print('maxcol: ', maxcol)
+
+    for col in range(2, maxcol):
+        df.iloc[row, col] = df[col].sum(axis=0)
 
     return df
 
@@ -239,8 +279,8 @@ def andrew_task():
 
     """ подготовка массивов к работе - удаление лишних строк и столбцов """
     df1 = preparation1(df1)  # 0, 3, 6    - нужны, 1,2,4,5 - удалить
-    df2 = preparation2(df2)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
-    df3 = preparation3(df3)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
+    df2 = preparation1(df2)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
+    df3 = preparation1(df3)  # 0,3,5,7,8  - нужны, 1,2,4,6 - удалить
 
     """ получить как уникальные значения, которые находятся только в df2 """
 
@@ -249,8 +289,8 @@ def andrew_task():
 
     # --- добавлены новые столбцы с уникальными позициями
 
-    df2_merge_outer = pd.merge(df1, df2, on=['item_code', 'Nomenclature'], how='outer')
-    df3_merge_outer = pd.merge(df2_merge_outer, df3, on=['item_code', 'Nomenclature'], how='outer')
+    df2_merge_outer = pd.merge(df1, df2, on=['Номенклатура.Код', 'Номенклатура'], how='outer')
+    df3_merge_outer = pd.merge(df2_merge_outer, df3, on=['Номенклатура.Код', 'Номенклатура'], how='outer')
 
     # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
@@ -268,21 +308,20 @@ def andrew_task():
     """
 
     """ добавление строчек ИТОГО в конец колонки склада со значением суммы """
-    df1 = append_TOTAL(df1, ['05_Pavlovsky'])
-    df2 = append_TOTAL(df2, ['02_Car', '04_Victory', '08_Center'])
-    df3 = append_TOTAL(df3, ['01_Kirova', '03_Inter', '09_Station'])
+    df1 = append_TOTAL(df1 )
+    df2 = append_TOTAL(df2 )
+    df3 = append_TOTAL(df3 )
 
-    df3_merge_outer = append_TOTAL(df3_merge_outer, ['05_Pavlovsky', '02_Car', '04_Victory',
-                                                     '08_Center', '01_Kirova', '03_Inter', '09_Station'])
+    df3_merge_outer = append_TOTAL(df3_merge_outer )
 
     # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
     # df3_merge_outer.index = pd.date_range( '1900/1/30', periods = df3_merge_outer.shape[0] )
 
     print(r'df3_merge_outer.shape[0]>>', df3_merge_outer.shape[0])
-    print('df3_merge_outer[Nomenclature].unique() >>>', df3_merge_outer['Nomenclature'].nunique())
+    print('df3_merge_outer[Номенклатура].unique() >>>', df3_merge_outer['Номенклатура'].nunique())
 
     #
-    # df3_merge_outer = df3_merge_outer.append({'item_code': 'TotalTOTAL'}, ignore_index=True)
+    # df3_merge_outer = df3_merge_outer.append({'Номенклатура.Код': 'TotalTOTAL'}, ignore_index=True)
 
     writer = pd.ExcelWriter(file_name_out)
     df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer')
@@ -290,11 +329,13 @@ def andrew_task():
     worksheet = writer.sheets['df3_merge_outer']
     worksheet.set_column(1, 1, 11)
     worksheet.set_column(2, 2, 100)
-    worksheet.set_column(3, 9, 10)
+    worksheet.set_column(3, 3, 20)
+    worksheet.set_column(4, 4, 20)
+    worksheet.set_column(5, 9, 10)
     writer.save()
 
     # print( '\n>>>', df3_merge_outer.describe(include='all') )
-    # ddf3 = df3_merge_outer['Nomenclature'].unique()
+    # ddf3 = df3_merge_outer['Номенклатура'].unique()
 
     # print("\nddf3>>>", ddf3.describe(include='all'))
 
@@ -347,6 +388,6 @@ def andrew_task():
 
 
 # test()
-# andrew_task()
+andrew_task()
 
 read_filenames(PATH)

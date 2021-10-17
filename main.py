@@ -20,11 +20,28 @@ IN_FILES = [
     '2021.10.11 продажи за год KYB ШСВ.xlsx'
 ]
 
+FilesList = []
+
 OUT_FILES = [
     'общий.xlsx',
     'общий2.xlsx'
 ]
 
+
+# получаем список всех файлов по пути path """
+
+def read_filenames(path):
+
+    f = []
+    for (dirpath, dirnames, filenames) in os.walk(path):
+        f.extend(filenames)
+        break
+
+    for i in f:
+        FilesList.append([i, False])
+
+    # print('FilesList: ', FilesList)
+    return FilesList
 
 
 # тест функции enumerate
@@ -78,7 +95,6 @@ def problem(filename):
     os.remove(filename)
     os.rename(filename + '.zip', filename)
 
-
     """ удалить папку tmp и все вложения
     files = glob.glob(tmp_folder+'**/*.*', recursive=True)
     print( "tmp_folder+'/**/*.*' >>> ",tmp_folder+'**/*.*' )
@@ -94,7 +110,6 @@ def problem(filename):
     except OSError as e:
         print("Error: %s : %s" % (tmp_folder, e.strerror))
     """
-
 
 
 def preparation1(df1):
@@ -189,7 +204,8 @@ def equel_values(df1, df2):
 
     return df2_equel_vals
 
-def append_TOTAL( df, columns ):
+
+def append_TOTAL(df, columns):
     """ добавление строчки ИТОГО в конец колонки склада со значением суммы """
 
     # - костыль чтобы убрать ошибку:
@@ -201,10 +217,9 @@ def append_TOTAL( df, columns ):
     df = df.append({'item_code': 'Total'}, ignore_index=True)
 
     for column in columns:
-        df.loc[(df['item_code']=='Total'),column] = df[column].sum(axis=0)
+        df.loc[(df['item_code'] == 'Total'), column] = df[column].sum(axis=0)
 
     return df
-
 
 
 def andrew_task():
@@ -234,8 +249,8 @@ def andrew_task():
 
     # --- добавлены новые столбцы с уникальными позициями
 
-    df2_merge_outer = pd.merge( df1, df2, on = ['item_code', 'Nomenclature'], how = 'outer')
-    df3_merge_outer = pd.merge(df2_merge_outer, df3, on = ['item_code', 'Nomenclature'], how = 'outer')
+    df2_merge_outer = pd.merge(df1, df2, on=['item_code', 'Nomenclature'], how='outer')
+    df3_merge_outer = pd.merge(df2_merge_outer, df3, on=['item_code', 'Nomenclature'], how='outer')
 
     # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
 
@@ -252,25 +267,22 @@ def andrew_task():
     print( '\ncolnames_numerics_only:',colnames_numerics_only)
     """
 
-
     """ добавление строчек ИТОГО в конец колонки склада со значением суммы """
     df1 = append_TOTAL(df1, ['05_Pavlovsky'])
-    df2 = append_TOTAL(df2, ['02_Car','04_Victory','08_Center'] )
+    df2 = append_TOTAL(df2, ['02_Car', '04_Victory', '08_Center'])
     df3 = append_TOTAL(df3, ['01_Kirova', '03_Inter', '09_Station'])
 
     df3_merge_outer = append_TOTAL(df3_merge_outer, ['05_Pavlovsky', '02_Car', '04_Victory',
-                                   '08_Center','01_Kirova', '03_Inter', '09_Station'])
-
+                                                     '08_Center', '01_Kirova', '03_Inter', '09_Station'])
 
     # print("\ndf2_unique_vals['02_Car'].count():", df2_unique_vals['02_Car'].count())
-    #df3_merge_outer.index = pd.date_range( '1900/1/30', periods = df3_merge_outer.shape[0] )
+    # df3_merge_outer.index = pd.date_range( '1900/1/30', periods = df3_merge_outer.shape[0] )
 
-    print( r'df3_merge_outer.shape[0]>>',df3_merge_outer.shape[0])
-    print( 'df3_merge_outer[Nomenclature].unique() >>>', df3_merge_outer['Nomenclature'].nunique())
+    print(r'df3_merge_outer.shape[0]>>', df3_merge_outer.shape[0])
+    print('df3_merge_outer[Nomenclature].unique() >>>', df3_merge_outer['Nomenclature'].nunique())
 
     #
-    #df3_merge_outer = df3_merge_outer.append({'item_code': 'TotalTOTAL'}, ignore_index=True)
-
+    # df3_merge_outer = df3_merge_outer.append({'item_code': 'TotalTOTAL'}, ignore_index=True)
 
     writer = pd.ExcelWriter(file_name_out)
     df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer')
@@ -281,12 +293,10 @@ def andrew_task():
     worksheet.set_column(3, 9, 10)
     writer.save()
 
+    # print( '\n>>>', df3_merge_outer.describe(include='all') )
+    # ddf3 = df3_merge_outer['Nomenclature'].unique()
 
-    #print( '\n>>>', df3_merge_outer.describe(include='all') )
-    #ddf3 = df3_merge_outer['Nomenclature'].unique()
-
-    #print("\nddf3>>>", ddf3.describe(include='all'))
-
+    # print("\nddf3>>>", ddf3.describe(include='all'))
 
     """ Запись результатов обработки в excel файл 
     with pd.ExcelWriter(file_name_out) as writer:
@@ -297,13 +307,11 @@ def andrew_task():
         df3.to_excel(writer, sheet_name='df3')
     """
 
-
     """
     информация по методу изменения ширины столбцов
     
     https://coderoad.ru/17326973/%D0%95%D1%81%D1%82%D1%8C-%D0%BB%D0%B8-%D1%81%D0%BF%D0%BE%D1%81%D0%BE%D0%B1-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D1%88%D0%B8%D1%80%D0%B8%D0%BD%D1%83-%D1%81%D1%82%D0%BE%D0%BB%D0%B1%D1%86%D0%BE%D0%B2-Excel-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E
     """
-
 
     # print(df10)
 
@@ -339,4 +347,6 @@ def andrew_task():
 
 
 # test()
-andrew_task()
+# andrew_task()
+
+read_filenames(PATH)

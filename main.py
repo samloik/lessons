@@ -60,10 +60,13 @@ def read_filenames(path):
     return df_out
 
 # объединение датафраймов в один
-def append_file(df_out, df ):
+def append_file_new(df_out, df ):
 
-    print ('len(df.columns): ', len(df.columns))
-    print('len(df_out.columns): ',len(df_out.columns))
+    #print ('len(df.columns): ', len(df.columns))
+    #print('len(df_out.columns): ',len(df_out.columns))
+
+    #print('\n\ndf: \n', df.describe())
+    #print('\n\ndf_out: \n', df_out.describe())
 
     df_c = len(df.columns)
     df_out_c = len(df_out.columns)
@@ -71,37 +74,41 @@ def append_file(df_out, df ):
     count = 0
     for x in range( 2, df_out_c ):
         for y in range( 2, df_c ):
-            print ( 'df_out.loc[0, df_out.columns[x]]:', df_out.iloc[0, x])
-            print('df.loc[0, df.columns[y]]:', df.iloc[0, y])
 
             # если столцы одиннаковые
-            if df_out.iloc[0,x] == df.iloc[0, y]:
-                #df_out[df_out.columns[x]] = df_out[df_out.columns[x]] + df[df.columns[y]]
-                #df_out[df_out.columns[x]] = \
-                df2 = pd.merge(df_out, df, on=['Номенклатура.Код', 'Номенклатура'], how='inner')
-                print('df: ', df.info())
-                print('df2: ', df2.info())
-                df3 = df.drop(df2.index, inplace=True)
-                print('df3: ', df3.info())
+            if df_out.columns[x] == df.columns[y]:
+                print(f'\ndf_out.columns[x]: {df_out.columns[x]}\n\n')
 
-                    #append_row(df_out[df_out.columns[x]], df[df.columns[y]])
+                #df_out[df_out.columns[x]] = df_out[df_out.columns[x]] + df[df.columns[y]]
+
+                df2 = pd.merge(df_out, df, on=['Номенклатура.Код', 'Номенклатура'], how='inner')
+
+                print('\n\ndf: \n', df.describe())
+                print('\n\ndf2: \n', df2.describe())
+                print('\n\nlen(): ', len(df2.index))
+
+                df3 = df.drop(df[df['Номенклатура.Код'] == df2['Номенклатура.Код']].index, inplace=True)
+                print('\n\ndf3: \n', df3.describe())
+
+                #append_row(df_out[df_out.columns[x]], df[df.columns[y]])
                 count += 1
-            else:
+            """else:
                 #df_out[df.columns[y]] = df[df.columns[y]]
                 df_out[df.columns[y]] = append_row(df_out[df_out.columns[x]], df[df.columns[y]])
+                """
 
 
 
     print( 'COUNT: ', count)
     #if count == 0:
-    #    df_out = pd.merge(df_out, df, on=['Номенклатура.Код', 'Номенклатура'], how='outer')
+
+
+
+# объединение датафраймов в один
+def append_file(df_out, df):
+    df_out = pd.merge(df_out, df, on=['Номенклатура.Код', 'Номенклатура'], how='outer')
 
     return df_out
-
-def append_row( row1, row2 ):
-    nrow = row1 + row2
-
-    return nrow
 
 
 
@@ -278,9 +285,6 @@ def andrew_task():
 
     # подготовка массивов к работе - удаление лишних строк и столбцов
 
-    print( 'len(df): ', len(df))
-
-
     writer = pd.ExcelWriter(file_name_out)
     df3_merge_outer.to_excel(writer, sheet_name='df3_merge_outer',index=False)
     workbook = writer.book
@@ -300,5 +304,3 @@ def andrew_task():
 # test()
 
 andrew_task()
-
-print ( FilesList )

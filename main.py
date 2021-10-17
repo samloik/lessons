@@ -1,3 +1,4 @@
+
 import pandas as pd  # pip install openpyxl - проблема ушла
 import os  # для os.chdir() и problem()
 import xlsxwriter
@@ -77,7 +78,14 @@ def append_file(df_out, df ):
             # если столцы одиннаковые
             if df_out.iloc[0,x] == df.iloc[0, y]:
                 #df_out[df_out.columns[x]] = df_out[df_out.columns[x]] + df[df.columns[y]]
-                df_out[df_out.columns[x]] = append_row(df_out[df_out.columns[x]], df[df.columns[y]])
+                #df_out[df_out.columns[x]] = \
+                df2 = pd.merge(df_out, df, on=['Номенклатура.Код', 'Номенклатура'], how='inner')
+                print('df: ', df.info())
+                print('df2: ', df2.info())
+                df3 = df.drop(df2.index, inplace=True)
+                print('df3: ', df3.info())
+
+                    #append_row(df_out[df_out.columns[x]], df[df.columns[y]])
                 count += 1
             else:
                 #df_out[df.columns[y]] = df[df.columns[y]]

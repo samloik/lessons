@@ -8,14 +8,18 @@ from collections import defaultdict
 import pathlib # для модуля problem
 import numpy as np  # для поиска числовых столбцов
 
+
 PATH_TO_THE_FILES = {
     'РАБОТА': 'C:\Andrew files',
     'ДОМ': 'C:\Andrew files'
 }
 
+
 PATH = PATH_TO_THE_FILES['РАБОТА']
 
+
 FilesList = []
+
 
 OUT_FILES = [
     'общий.xlsx',
@@ -23,6 +27,8 @@ OUT_FILES = [
 ]
 
 df = {}
+
+
 
 # получаем список всех файлов по пути path """
 
@@ -45,7 +51,7 @@ def read_filenames(path):
             df[count] = preparation(df[count])
 
             if count > 1:
-                df_out = append_file(df_out, df[count])
+                df_out = append_file_new(df_out, df[count])
             else:
                 df_out = df[1]
             count += 1
@@ -62,11 +68,11 @@ def read_filenames(path):
 # объединение датафраймов в один
 def append_file_new(df_out, df ):
 
-    #print ('len(df.columns): ', len(df.columns))
-    #print('len(df_out.columns): ',len(df_out.columns))
+    print('len(df.columns): ', len(df.columns))
+    print('len(df_out.columns): ', len(df_out.columns))
 
-    #print('\n\ndf: \n', df.describe())
-    #print('\n\ndf_out: \n', df_out.describe())
+    print('\n\ndf: \n', df.describe())
+    print('\n\ndf_out: \n', df_out.describe())
 
     df_c = len(df.columns)
     df_out_c = len(df_out.columns)
@@ -80,15 +86,28 @@ def append_file_new(df_out, df ):
                 print(f'\ndf_out.columns[x]: {df_out.columns[x]}\n\n')
 
                 #df_out[df_out.columns[x]] = df_out[df_out.columns[x]] + df[df.columns[y]]
-
+                """
                 df2 = pd.merge(df_out, df, on=['Номенклатура.Код', 'Номенклатура'], how='inner')
 
                 print('\n\ndf: \n', df.describe())
                 print('\n\ndf2: \n', df2.describe())
                 print('\n\nlen(): ', len(df2.index))
+                """
 
-                df3 = df.drop(df[df['Номенклатура.Код'] == df2['Номенклатура.Код']].index, inplace=True)
+                df1 = df_out
+                df2 = df
+                unique_vals = df2[~df2['Номенклатура.Код'].isin(df1['Номенклатура.Код'])]
+                df3 = unique_vals
                 print('\n\ndf3: \n', df3.describe())
+                not_unique_vals = df1[df1['Номенклатура.Код'].isin(df2['Номенклатура.Код'])]
+                #df_out[df_out.columns[x]] = df_out[df_out.columns[x]] + not_unique_vals[df.columns[y]]
+
+
+                df4 = not_unique_vals
+                print('\n\ndf4: \n', df4.describe())
+
+                df_out = df_out.append(unique_vals, ignore_index=True )
+                print('\n\ndf_out: \n', df_out.describe())
 
                 #append_row(df_out[df_out.columns[x]], df[df.columns[y]])
                 count += 1
@@ -99,8 +118,11 @@ def append_file_new(df_out, df ):
 
 
 
+
     print( 'COUNT: ', count)
     #if count == 0:
+
+    return df_out
 
 
 
@@ -155,7 +177,6 @@ def un_pack():
     for file in FilesList:
         name = PATH + '\\' + file[0]
         if file[1] == True:
-            print( 'file[0]: ', name)
             un_problem( name )
             file[1] = False
 
@@ -293,11 +314,12 @@ def andrew_task():
     worksheet.set_column(1, 1, 100)
     worksheet.set_column(2, len(df3_merge_outer.columns), 15)
     writer.save()
-    print (len(df3_merge_outer.columns))
+
 
     # вернуть файлам первоначальный вид
     un_pack()
 
+    print( FilesList)
 
 
 

@@ -10,8 +10,8 @@ import numpy as np  # для поиска числовых столбцов
 
 
 PATH_TO_THE_FILES = {
-    'РАБОТА': 'C:\Andrew files',
-    'ДОМ': 'C:\Andrew files'
+    'РАБОТА': 'C:/Andrew files',
+    'ДОМ': 'C:/Andrew files'
 }
 
 
@@ -45,13 +45,13 @@ def read_filenames(path):
             FilesList.append([i, False])
 
             # загружаем массивы и ловим ошибки в файлах
-            df[count] = try_load(PATH + '\\'+i)
+            df[count] = try_load(PATH + '/'+i)
 
             # подготовка массивов к работе - удаление лишних строк и столбцов
             df[count] = preparation(df[count])
 
             if count > 1:
-                df_out = append_file_new(df_out, df[count])
+                df_out = append_file(df_out, df[count])
             else:
                 df_out = df[1]
             count += 1
@@ -164,7 +164,7 @@ def try_load(f):
             print('Исправлена ошибка: ', Error, f'в файле: \"{file_name}\"\n')
             DataFrame = pd.read_excel(file_name)
             for file in FilesList:
-                name = PATH + '\\' + file[0]
+                name = PATH + '/' + file[0]
                 if file_name == name:
                     file[1] = True
             return DataFrame
@@ -175,7 +175,7 @@ def try_load(f):
 # вернуть файлам первоначальный вид
 def un_pack():
     for file in FilesList:
-        name = PATH + '\\' + file[0]
+        name = PATH + '/' + file[0]
         if file[1] == True:
             un_problem( name )
             file[1] = False
@@ -184,7 +184,7 @@ def un_pack():
 
 # переименовывание файла 'SharedStrings.xml' в файл 'sharedStrings.xml' в архиве excel-файла filename
 def problem(filename):
-    tmp_folder = PATH + '\\tmp\\'
+    tmp_folder = PATH + '/tmp/'
 
     os.makedirs(tmp_folder, exist_ok=True)
 
@@ -221,7 +221,7 @@ def delete_folder(pth):
 
 # переименовывание файла обратно 'sharedStrings.xml' в файл 'SharedStrings.xml' в архиве excel-файла filename
 def un_problem(filename):
-    tmp_folder = PATH + '\\tmp\\'
+    tmp_folder = PATH + '/tmp/'
 
     os.makedirs(tmp_folder, exist_ok=True)
 
@@ -295,7 +295,7 @@ def append_TOTAL(df ):
 
 def andrew_task():
 
-    file_name_out = PATH + '\\' + OUT_FILES[0]
+    file_name_out = PATH + '/' + OUT_FILES[0]
 
 
     os.chdir(PATH)
